@@ -1,0 +1,8 @@
+:root {
+  --clr-white: #fff;
+}
+
+*, *::before, *::after {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
