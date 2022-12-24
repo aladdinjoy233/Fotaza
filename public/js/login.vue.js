@@ -1,11 +1,17 @@
+import { TestComponent } from "./components/TestComponent.js";
+
 var app = new Vue({
 	el: "#app",
-	data: {
 
-		test: 'heya'
-
+	components: {
+		'test-component': TestComponent
 	},
+
+	data: {
+		test: 'heya'
+	},
+
 	mounted() {
-		console.log('HEY!');
+		console.log('HEY!')
 	}
 })

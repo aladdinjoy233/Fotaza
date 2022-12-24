@@ -9,7 +9,7 @@
 		if (scripts.length > 0) {
 			for (const script of scripts) {
 	%>
-		<script defer src="/js/<%=script%>.vue.js"></script>
+		<script type="module" defer src="/js/<%=script%>.vue.js"></script>
 	<%}}%>
 
 </head>
