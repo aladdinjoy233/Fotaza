@@ -35,3 +35,23 @@ exports.login = (req, res, next) => {
 
 	})(req, res, next)
 }
+
+exports.logout = (req, res) => {
+	res.clearCookie('jwt')
+	req.session ? req.session.destroy() : ''
+	return res.redirect('/auth')
+}
+
+exports.isAuthenticated = async (req, res, next) => {
+	if (!req.cookies.jwt)
+		return res.redirect('/auth')
+
+	const decodificada = await promisify(jwt.verify)(req.cookies.jwt, jwtConfig.secret)
+
+	const user = User.findByPk(decodificada.id)
+
+	if (user == null) return next()
+
+	req.user = await user;
+	return next()
+}

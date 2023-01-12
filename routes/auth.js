@@ -28,7 +28,9 @@ router.get('/', function(req, res, next) {
 //   res.json({ title: 'Signup!', data: [req.body.email, req.body.password] })
 // });
 
+// Passport rutas
 router.post('/signup', authController.signup)
 router.post('/login', authController.login)
+router.get('/logout', authController.logout)
 
 module.exports = router;
