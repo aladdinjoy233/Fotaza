@@ -1,15 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <%- include('partials/head') %>
+
 <body>
 	<div id="app">
-		<p>{{ test }}</p>
-		<test-component></test-component>
+
+		<div class="form-container">
+			<form id="login-form" @submit.prevent="submitForm(true)">
+				<label for="email-login">Email:</label>
+				<input type="email" name="email-login" id="email-login" v-model="email">
+				<label for="pass-login">Password:</label>
+				<input type="password" name="pass-login" id="pass-login" v-model="password">
+				<input type="submit" value="Log-in">
+			</form>
+
+			<form id="signup-form" @submit.prevent="submitForm()">
+				<label for="email-signup">Email:</label>
+				<input type="email" name="email-signup" id="email-signup" v-model="email">
+				<label for="pass-signup">Password:</label>
+				<input type="password" name="pass-signup" id="pass-signup" v-model="password">
+				<input type="submit" value="Sign-up">
+			</form>
+		</div>
+
 	</div>
 </body>
-
-<script>
-
-</script>
 
 </html>
