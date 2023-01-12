@@ -10,11 +10,11 @@ User.init({
 		autoIncrement: true,
 		primaryKey: true
 	},
-	nombre: {
-		type: DataTypes.STRING,
-		allowNull: false
-	},
-	usuario: {
+	// nombre: {
+	// 	type: DataTypes.STRING,
+	// 	allowNull: false
+	// },
+	email: {
 		type: DataTypes.STRING,
 		unique: true,
 		allowNull: false
@@ -29,3 +29,5 @@ User.init({
 	modelName: 'user',
 	tableName: 'user'
 })
+
+module.exports = User

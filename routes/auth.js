@@ -20,12 +20,14 @@ router.post('/login', function(req, res, next) {
   res.json({ title: 'Login!', data: [req.body.email, req.body.password] })
 });
 
-router.post('/signup', function(req, res, next) {
+// router.post('/signup', function(req, res, next) {
 
-	console.log(`User's email: ${req.body.email}`)
-	console.log(`User's password: ${req.body.password}`)
+// 	console.log(`User's email: ${req.body.email}`)
+// 	console.log(`User's password: ${req.body.password}`)
 
-  res.json({ title: 'Signup!', data: [req.body.email, req.body.password] })
-});
+//   res.json({ title: 'Signup!', data: [req.body.email, req.body.password] })
+// });
+
+router.post('/signup', authController.signup)
 
 module.exports = router;

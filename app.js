@@ -9,6 +9,9 @@ var session = require('express-session');
 var sequelize = require('./database/db');
 require('./database/asociations');
 
+// Autenticar al usuario
+require('./auth/auth');
+
 var indexRouter = require('./routes/index');
 var authRouter = require('./routes/auth');
 
