@@ -7,8 +7,11 @@ const passport = require('passport');
 
 exports.signup = (req, res, next) => {
 	passport.authenticate('signup', { session: false }, async (err, user, info) => {
+		if (err) return next(err)
 
-		res.json({ message: 'YAY!', user });
+		if (!user) return next(new Error('No hay un usuario..'))
+
+		return res.redirect('/')
 
 	})(req, res, next)
 }
