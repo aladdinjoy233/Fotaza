@@ -32,7 +32,7 @@ app.use('/', indexRouter);
 app.use('/auth', authRouter);
 
 // conectar a la db
-sequelize.sync({ force: true })
+sequelize.sync({ force: false })
 	.then(() => console.log('Conectado a la base de datos!'))
 	.catch(err => console.log(err));
 

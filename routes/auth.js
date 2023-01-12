@@ -12,13 +12,13 @@ router.get('/', function(req, res, next) {
 //   res.json({ title: 'Test', sentence: ['this', 'is', 'a', 'test'] })
 // });
 
-router.post('/login', function(req, res, next) {
+// router.post('/login', function(req, res, next) {
 
-	console.log(`User's email: ${req.body.email}`)
-	console.log(`User's password: ${req.body.password}`)
+// 	console.log(`User's email: ${req.body.email}`)
+// 	console.log(`User's password: ${req.body.password}`)
 
-  res.json({ title: 'Login!', data: [req.body.email, req.body.password] })
-});
+//   res.json({ title: 'Login!', data: [req.body.email, req.body.password] })
+// });
 
 // router.post('/signup', function(req, res, next) {
 
@@ -29,5 +29,6 @@ router.post('/login', function(req, res, next) {
 // });
 
 router.post('/signup', authController.signup)
+router.post('/login', authController.login)
 
 module.exports = router;

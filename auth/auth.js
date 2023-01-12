@@ -30,4 +30,23 @@ passport.use('signup', new LocalStrategy({
 		const newUser = await User.create({ email, password: passHash	})
 		return done(null, newUser)
 	}
-));
+))
+
+// Funcion para logear un usuario
+passport.use('login', new LocalStrategy({
+		usernameField: 'email',
+		passwordField: 'password',
+	},
+	async (email, password, done) => {
+		const user = await User.findOne({ where: { email } })
+
+		// Si no existe el usuario, devolver error
+		if (!user) return done(null, false, { message: 'Usuario no existente' })
+
+		// Validar la contraseña
+		const validate = await bcrypt.compare(password, user.password)
+		if (!validate) return done(null, false, { message: 'Contraseña equivocado' })
+
+		return done(null, user, { message: 'Logeado!' })
+	}
+))
