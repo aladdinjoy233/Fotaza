@@ -3,7 +3,7 @@ var router = express.Router();
 
 const authController = require('../controllers/authController')
 
-router.get('/', function(req, res, next) {
+router.get('/', authController.isLoggedIn, function(req, res, next) {
   res.render('login', { title: 'Login', scripts: ['login'] })
 });
 

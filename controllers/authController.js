@@ -55,6 +55,22 @@ exports.isAuthenticated = async (req, res, next) => {
 
 	if (user == null) return next()
 
-	req.user = await user;
+	req.user = await user
 	return next()
+}
+
+// Si ya esta logeado, no permitir que vuelva al login
+exports.isLoggedIn = async (req, res, next) => {
+	if (req.cookies.jwt) {
+		const decodificada = await promisify(jwt.verify)(req.cookies.jwt, jwtConfig.secret)
+
+		const usuario = User.findByPk(decodificada.id)
+
+		if (usuario == null) return next()
+
+		req.user = await usuario
+		return res.redirect('/')
+	} else {
+		return next()
+	}
 }
