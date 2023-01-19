@@ -19,8 +19,13 @@ exports.signup = (req, res, next) => {
 exports.login = (req, res, next) => {
 	passport.authenticate('login', { session: false }, async (err, user, info) => {
 
-		if (err || !user)
-			return next(new Error('An error occurred.'))
+		if (err)
+			return next(new Error('An error occurred...'))
+
+		if (!user) {
+			// `info.message` corresponde a `return done(null, false, { message: 'Usuario no existente' })`
+			return res.json({error: true, errorMsg: info.message})
+		}
 
 		req.login(user, { session: false }, async (err) => {
 			if (err) return next(err)

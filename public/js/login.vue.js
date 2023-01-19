@@ -26,8 +26,10 @@ var app = new Vue({
 					'Content-Type': 'application/json'
 				}
 			})
-				.then(res => res.redirected ? window.location.href = res.url : console.info(`${err} url: ${url}`))
-				.catch(err => console.info(`${err}`))
+				.then(res => res.redirected ? window.location.href = res.url : res.json())
+				.then(data => {
+					console.log(data);
+				})
 
 		},
 	},
