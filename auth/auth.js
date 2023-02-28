@@ -3,7 +3,7 @@ const LocalStrategy = require('passport-local').Strategy
 const bcrypt = require('bcrypt');
 
 // Necesario para Google
-var GoogleStrategy = require('passport-google-oidc')
+const GoogleStrategy = require('passport-google-oauth2').Strategy;
 const { googleConfig } = require('../config')
 
 const User = require('../database/models/User')
@@ -50,3 +50,27 @@ passport.use('login', new LocalStrategy({
 		return done(null, user, { message: 'Logeado!' })
 	}
 ))
+
+passport.use('auth-google',
+	new GoogleStrategy({
+		clientID: googleConfig.GOOGLE_CLIENT_ID,
+		clientSecret: googleConfig.GOOGLE_CLIENT_SECRET,
+		callbackURL: "http://127.0.0.1:3000/auth/google",
+		passReqToCallback: true
+	},
+	async (request, accessToken, refreshToken, profile, done) => {
+
+		const email = profile.emails[0].value
+		const user = await User.findOne({ where: { email } })
+
+		// Si no existe el usuario, crealo
+		if (user == null) {
+			const password = await bcrypt.hash(profile.id, 8)
+			const newUser = await User.create({ email, password	})
+
+			done(null, newUser)
+		} else { // Si existe, hacer logeo
+			done(null, user)
+		}
+	}
+));

@@ -79,3 +79,39 @@ exports.isLoggedIn = async (req, res, next) => {
 		return next()
 	}
 }
+
+// Google login
+exports.googleLogin = async (req, res, next) => {
+	passport.authenticate('auth-google', {
+		session: false,
+		scope: [
+			'https://www.googleapis.com/auth/userinfo.email',
+			'https://www.googleapis.com/auth/userinfo.profile'
+		]
+	}, async (err, user, info) => {
+
+		// Si hay error, dar error
+		if (err)
+			return next(new Error('An error occurred...'))
+
+		if (!user) {
+			// `info.message` corresponde a `return done(null, false, { message: 'Usuario no existente' })`
+			return res.json({error: true, errorMsg: info.message})
+		}
+
+		req.login(user, { session: false }, async (err) => {
+			if (err) return next(err)
+
+			const token = jwt.sign({ id: user.id }, jwtConfig.secret)
+
+			const cookieOptions = {
+				expires: new Date(Date.now() + jwtConfig.cookieExpireTime * 24 * 60 * 60 * 1000),
+				httpOnly: true
+			}
+
+			res.cookie('jwt', token, cookieOptions)
+			return res.redirect('/')
+		})
+
+	})(req, res, next)
+}
