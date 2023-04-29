@@ -11,7 +11,7 @@ exports.signup = (req, res, next) => {
 
 		if (!user) return next(new Error('No hay un usuario..'))
 
-		return res.redirect('/')
+		return res.redirect('/auth#login')
 
 	})(req, res, next)
 }

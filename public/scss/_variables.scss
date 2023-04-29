@@ -1,6 +1,34 @@
 :root {
 	// Colors
 	--clr-white: #fff;
+	--dark-bg: #1c1c1c;
+
+	--clr-primary: #ffac8c;
+	--clr-primary-hover: #ffdfd2;
+
+	// Purplish colors
+	// --clr-primary: #d8a1e8;
+	// --clr-primary-hover: #ddc9e3;
+
+	--clr-grey: rgb(54, 54, 54);
+	--clr-grey-hover: rgb(82, 82, 82);
+	--clr-grey-dark: rgb(44, 44, 44);
+
+	// -- Alert colors
+	--clr-error: #f35c5c;
+	--clr-error-bg: #271616;
+	--clr-success: #00c853;
+	--clr-success-bg: #14251c;
+	--clr-info: #e8e85d;
+	--clr-info-bg: #303023;
+
+	// Sizing
+	--btn-padding-x: 0.625em;
+	--btn-padding-y: 0.25em;
+	--btn-padding: var(--btn-padding-y) var(--btn-padding-x);
+
+	// Border radius
+	--border-radius: 0.3125em;
 
 	// Fonts
 }

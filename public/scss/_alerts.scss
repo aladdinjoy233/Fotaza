@@ -1,0 +1,52 @@
+.alert {
+	padding: 1rem;
+	position: absolute;
+	right: 1rem;
+	bottom: 1rem;
+	border: 1px solid;
+	border-radius: var(--border-radius);
+	font-size: 14px;
+	max-width: 20rem;
+
+	animation: slide-in 0.5s ease forwards;
+
+	&.alert-error {
+		background-color: var(--clr-error-bg);
+		border-color: var(--clr-error);
+		color: var(--clr-error);
+	}
+
+	&.alert-success {
+		background-color: var(--clr-success-bg);
+		border-color: var(--clr-success);
+		color: var(--clr-success);
+	}
+
+	&.alert-info {
+		background-color: var(--clr-info-bg);
+		border-color: var(--clr-info);
+		color: var(--clr-info);
+	}
+
+	&.slide-out {
+		animation: slide-out 0.75s ease forwards;
+	}
+}
+
+@keyframes slide-in {
+	from {
+		transform: translateX(150%);
+	}
+	to {
+		transform: translateY(0);
+	}
+}
+
+@keyframes slide-out {
+	from {
+		transform: translateY(0);
+	}
+	to {
+		transform: translateX(150%);
+	}
+}

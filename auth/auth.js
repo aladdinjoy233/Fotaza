@@ -18,6 +18,9 @@ passport.use('signup', new LocalStrategy({
 		// Verificar que el campo no sea vacio
 		if (email == '') return done(null, false, { message: 'Campo vacio' })
 
+		if (req.body.password != req.body.confirmPassword)
+			return done(null, false, { message: 'Las contraseñas no coinciden' })
+
 		// Buscar que el email no este en uso
 		const user = await User.findOne({ where: { email } })
 		if (user)

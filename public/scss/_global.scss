@@ -1,3 +1,15 @@
+// Import Google Monterrat font with all the weights
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
+// 100 = thin
+// 200 = extra-light
+// 300 = light
+// 400 = regular
+// 500 = medium
+// 600 = semibold
+// 700 = bold
+// 800 = extra-bold
+// 900 = black
+
 // HTML5 default style reset
 *, *::before, *::after {
   box-sizing: border-box;
@@ -15,6 +27,11 @@ html, body {
 body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+
+	font-family: 'Montserrat', sans-serif;
+	background-color: var(--dark-bg);
+	color: var(--clr-white);
+	overflow: hidden;
 }
 
 img, picture, video, canvas, svg {
@@ -28,4 +45,8 @@ input, button, textarea, select {
 
 p, h1, h2, h3, h4, h5, h6 {
   overflow-wrap: break-word;
+}
+
+ul {
+  list-style-type: none;
 }
