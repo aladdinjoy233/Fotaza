@@ -31,17 +31,17 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
 
-// conectar a la db
+// Conectar a la db
 sequelize.sync({ force: false })
 	.then(() => console.log('Conectado a la base de datos!'))
 	.catch(err => console.log(err));
 
-// catch 404 and forward to error handler
+// Catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
 
-// error handler
+// Error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;

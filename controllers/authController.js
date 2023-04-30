@@ -1,16 +1,24 @@
-const jwt = require('jsonwebtoken');
-var User = require('../database/models/User');
-const { promisify } = require('util');
-const { jwtConfig } = require('../config');
+const jwt = require('jsonwebtoken')
+var User = require('../database/models/User')
+const { promisify } = require('util')
+const { jwtConfig } = require('../config')
 
-const passport = require('passport');
+const passport = require('passport')
+
+exports.showLogin = (req, res, next) => {
+	res.render('login', { title: '', scripts: ['login'] })
+}
 
 exports.signup = (req, res, next) => {
 	passport.authenticate('signup', { session: false }, async (err, user, info) => {
 		if (err) return next(err)
 
-		if (!user) return next(new Error('No hay un usuario..'))
+		if (!user) {
+			if (info.message == 'Missing credentials') info.message = "Faltan datos"
+			return res.status(400).json({error: true, errorMsg: info.message})
+		}
 
+		req.flash('success', 'Usuario creado correctamente')
 		return res.redirect('/auth#login')
 
 	})(req, res, next)
@@ -22,10 +30,8 @@ exports.login = (req, res, next) => {
 		if (err)
 			return next(new Error('An error occurred...'))
 
-		if (!user) {
-			// `info.message` corresponde a `return done(null, false, { message: 'Usuario no existente' })`
-			return res.json({error: true, errorMsg: info.message})
-		}
+		if (!user)
+			return res.status(400).json({error: true, errorMsg: info.message})
 
 		req.login(user, { session: false }, async (err) => {
 			if (err) return next(err)
@@ -94,10 +100,8 @@ exports.googleLogin = async (req, res, next) => {
 		if (err)
 			return next(new Error('An error occurred...'))
 
-		if (!user) {
-			// `info.message` corresponde a `return done(null, false, { message: 'Usuario no existente' })`
-			return res.json({error: true, errorMsg: info.message})
-		}
+		if (!user)
+			return res.status(400).json({error: true, errorMsg: info.message})
 
 		req.login(user, { session: false }, async (err) => {
 			if (err) return next(err)

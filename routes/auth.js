@@ -3,9 +3,7 @@ var router = express.Router();
 
 const authController = require('../controllers/authController')
 
-router.get('/', authController.isLoggedIn, (req, res, next) => {
-  res.render('login', { title: '', scripts: ['login'] })
-})
+router.get('/', authController.isLoggedIn, authController.showLogin)
 
 // Passport rutas
 router.post('/signup', authController.signup)

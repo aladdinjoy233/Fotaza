@@ -105,6 +105,7 @@ var app = new Vue({
 
 			const userData = login ? vm.loginDetails : vm.signupDetails
 			const url = login ? '/auth/login' : '/auth/signup'
+			const stringMethod = login ? "Log-in" : "Sign-up"
 
 			fetch(url, {
 				method: 'POST',
@@ -115,7 +116,9 @@ var app = new Vue({
 			})
 				.then(res => res.redirected ? window.location.href = res.url : res.json())
 				.then(data => {
-					console.log(data)
+					if (data.error) {
+						showAlert(stringMethod, data.errorMsg, 'error')
+					}
 				})
 				.catch(err => console.log(err))
 		},
