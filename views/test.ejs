@@ -1,0 +1,28 @@
+<div>
+	<input type="file" name="" id="">
+	<button>Upload</button>
+</div>
+
+<script>
+	var input = document.querySelector('input');
+	var button = document.querySelector('button');
+	var file = null;
+
+	input.addEventListener('change', function(e){
+		file = e.target.files[0];
+	});
+
+	button.addEventListener('click', function(e){
+		const formData = new FormData();
+		formData.append('testFile', file);
+
+		fetch('/test/upload', {
+			method: 'POST',
+			body: formData
+		})
+			.then(res => res.text())
+			.then(data => console.log(data))
+			.catch(err => console.log(err));
+	});
+
+</script>

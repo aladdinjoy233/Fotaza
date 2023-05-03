@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-var User = require('../database/models/User')
+const User = require('../database/models/User')
 const { promisify } = require('util')
 const { jwtConfig } = require('../config')
 
@@ -17,10 +17,8 @@ exports.signup = (req, res, next) => {
 			if (info.message == 'Missing credentials') info.message = "Faltan datos"
 			return res.status(400).json({error: true, errorMsg: info.message})
 		}
-
-		req.flash('success', 'Usuario creado correctamente')
 		return res.redirect('/auth#login')
-
+		
 	})(req, res, next)
 }
 
@@ -98,7 +96,7 @@ exports.googleLogin = async (req, res, next) => {
 
 		// Si hay error, dar error
 		if (err)
-			return next(new Error('An error occurred...'))
+			return next(new Error('Ocurrio un error...'))
 
 		if (!user)
 			return res.status(400).json({error: true, errorMsg: info.message})

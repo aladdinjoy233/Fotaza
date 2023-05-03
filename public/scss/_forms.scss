@@ -17,6 +17,18 @@
 	}
 }
 
+.btn-secondary {
+	background-color: transparent;
+	border: 2px solid var(--clr-primary);
+	color: var(--clr-primary);
+	transition: all 100ms ease;
+	font-weight: 500;
+
+	&:hover {
+		background-color: var(--clr-grey-hover);
+	}
+}
+
 .btn-link {
 	padding: unset;
 	display: inline-block;
@@ -24,6 +36,7 @@
 	color: inherit;
 	text-decoration: none;
 	transition: color 400ms cubic-bezier(0.25, 0.8, 0.25, 1);
+	background-color: transparent;
 
 	&::after {
 		content: '';
@@ -44,6 +57,13 @@
 	&:hover::after {
 		width: 100%;
 		left: 0%;
+	}
+
+	&-danger {
+		@extend .btn-link;
+		color: var(--clr-error);
+
+		&::after { content: none; }
 	}
 }
 

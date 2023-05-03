@@ -17,6 +17,12 @@ var authRouter = require('./routes/auth');
 
 var app = express();
 
+// Middleware para obtener baseUrl
+app.use((req, res, next) => {
+	global.baseUrl = req.protocol + '://' + req.get('host');
+	next();
+});
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -32,7 +38,7 @@ app.use('/', indexRouter);
 app.use('/auth', authRouter);
 
 // Conectar a la db
-sequelize.sync({ force: false })
+sequelize.sync({ force: true })
 	.then(() => console.log('Conectado a la base de datos!'))
 	.catch(err => console.log(err));
 

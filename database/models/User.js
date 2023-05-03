@@ -10,14 +10,23 @@ User.init({
 		autoIncrement: true,
 		primaryKey: true
 	},
-	// nombre: {
-	// 	type: DataTypes.STRING,
-	// 	allowNull: false
-	// },
+	nombre: {
+		type: DataTypes.STRING,
+		allowNull: true
+	},
+	usuario: {
+		type: DataTypes.STRING,
+		unique: true,
+		allowNull: true
+	},
 	email: {
 		type: DataTypes.STRING,
 		unique: true,
 		allowNull: false
+	},
+	avatar: {
+		type: DataTypes.STRING,
+		allowNull: true
 	},
 	password: {
 		type: DataTypes.STRING,
@@ -26,8 +35,8 @@ User.init({
 
 }, {
 	sequelize,
-	modelName: 'user',
-	tableName: 'user'
+	modelName: 'users',
+	tableName: 'users'
 })
 
 module.exports = User
