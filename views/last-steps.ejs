@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('partials/head') %>
+<body>
+
+	<div id="app" class="login-page">
+
+		<h1 class="page-title">Fotaza</h1>
+
+		<div class="forms-container">
+
+			<div class="options">
+				<h3>Ultimos pasos</h3>
+			</div>
+
+			<div class="forms">
+				
+				<div class="form-container">
+					<form id="signup-form" class="sign-up" @submit.prevent="submitForm()">
+						<div class="input-group">
+							<label for="avatar">Foto perfil</label>
+							<div class="flex-row-group">
+								<label for="avatar" class="avatar-input-label">
+									<img :src="signupDetails.avatar.url || '/img/user.svg'">
+									<div class="hover-overlay"><i class="fa-solid fa-camera"></i></div>
+								</label>
+								<Transition name="resetAvatar">
+									<button type="button" class="btn btn-link-danger" v-if="signupDetails.avatar.url" @click="resetAvatar"><i class="fa-solid fa-trash"></i></button>
+								</Transition>
+							</div>
+							<input type="file" name="avatar" id="avatar" accept="image/*" @change="uploadImage" hidden>
+						</div>
+						<div class="input-group">
+							<label for="usuario">Usuario</label>
+							<input type="text" name="usuario" id="usuario" v-model="signupDetails.usuario">
+						</div>
+						<div class="input-group">
+							<label for="nombre">Nombre</label>
+							<input type="text" name="nombre" id="nombre" v-model="signupDetails.nombre">
+						</div>
+						<div class="submit-group">
+							<input class="btn btn-primary" type="submit" value="Sign-up">
+						</div>
+					</form>
+				</div>
+
+			</div>
+		</div>
+
+	</div>
+	
+</body>
+<script>
+	const vueApp = new Vue({
+		el: '#app',
+
+		data: {
+
+			signupDetails: {
+				id: null,
+				email: '',
+				password: '',
+				confirmPassword: '',
+				avatar: {
+					url: '',
+					file: null
+				},
+				usuario: '',
+				nombre: '',
+			},
+
+		},
+
+		methods: {
+
+			validateSignup() {
+				const vm = this
+				let err = false
+				removeFormErrors('#signup-form')
+
+				if (vm.signupDetails.usuario == '') {
+					formError('#usuario', 'Campo vacio')
+					err = true
+				}
+
+				if (vm.signupDetails.nombre == '') {
+					formError('#nombre', 'Campo vacio')
+					err = true
+				}
+
+				return err			
+			},
+
+			uploadImage(e) {
+				const vm = this
+				const file = e.target.files[0]
+
+				if (!file) return
+
+				const reader = new FileReader()
+				reader.onload = event => {
+					vm.signupDetails.avatar.url = event.target.result
+					vm.signupDetails.avatar.file = file
+				}
+				reader.readAsDataURL(file)
+			},
+
+			resetAvatar() {
+				const vm = this
+				vm.signupDetails.avatar = { url: '', file: null }
+				const fileInput = document.querySelector('#avatar');
+				fileInput.value = ''
+			},
+
+			submitForm() {
+				const vm = this
+
+				const err = vm.validateSignup()
+				if (err) return
+
+				let formData = new FormData();
+				formData.append('id', vm.signupDetails.id)
+				formData.append('avatar', vm.signupDetails.avatar.file)
+				formData.append('usuario', vm.signupDetails.usuario)
+				formData.append('nombre', vm.signupDetails.nombre)
+
+				fetch(`/auth/finishLastSteps`, {
+					method: 'POST',
+					body: formData
+				})
+					.then(res => res.redirected ? window.location.href = res.url : res.json())
+					.then(data => {
+						if (data.error) {
+							showAlert('Sign-up', data.errorMsg, 'error')
+						}
+					})
+					.catch(err => console.log(err))
+			},
+
+		},
+
+		mounted() {
+			const vm = this
+			vm.signupDetails.id = '<%= usuario.id %>' || null
+			vm.signupDetails.nombre = '<%= usuario.nombre %>' || ''
+			vm.signupDetails.email = '<%= usuario.email %>' || ''
+		}
+	})
+</script>
+</html>

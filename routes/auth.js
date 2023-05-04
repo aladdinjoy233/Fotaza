@@ -13,5 +13,8 @@ router.post('/signup', upload.single('avatar'), authController.signup)
 router.post('/login', authController.login)
 router.get('/logout', authController.logout)
 router.get('/google', authController.googleLogin)
+router.get('/lastSteps', (req, res) => res.redirect('/'))
+router.get('/lastSteps/:userId', authController.lastSteps)
+router.post('/finishLastSteps', upload.single('avatar'), authController.finishLastSteps)
 
 module.exports = router;

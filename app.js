@@ -14,6 +14,7 @@ require('./auth/auth');
 
 var indexRouter = require('./routes/index');
 var authRouter = require('./routes/auth');
+var userRouter = require('./routes/user');
 
 var app = express();
 
@@ -34,11 +35,16 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Middleware para obtener usuarioId
+const { getUserId } = require('./controllers/authController');
+app.use(getUserId);
+
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
+app.use('/user', userRouter);
 
 // Conectar a la db
-sequelize.sync({ force: true })
+sequelize.sync({ force: false })
 	.then(() => console.log('Conectado a la base de datos!'))
 	.catch(err => console.log(err));
 

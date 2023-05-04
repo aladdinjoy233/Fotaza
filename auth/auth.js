@@ -1,8 +1,8 @@
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt')
 
-const { uploadAvatar } = require('../firebase/firebase');
+const { uploadAvatar } = require('../firebase/firebase')
 
 // Necesario para Google
 const GoogleStrategy = require('passport-google-oauth2').Strategy
@@ -33,28 +33,6 @@ passport.use('signup', new LocalStrategy({
 		if (req.body.password != req.body.confirmPassword)
 			return done(null, false, { message: 'Las contraseñas no coinciden' })
 
-		// ! When there's an avatar no user being created
-		/*
-		req.body:
-		{
-			usuario: 'allan',
-			nombre: 'allan',
-			email: 'ninjalover249@ye.com',
-			password: '12345',
-			confirmPassword: '12345'
-		}
-
-		req.file:
-		{
-			fieldname: 'avatar',
-			originalname: 'this is what ____ feels like.jpg',
-			encoding: '7bit',
-			mimetype: 'image/jpeg',
-			buffer: <Buffer ff d8 ff e0 00 10 4a 46 49 46 00 01 01 01 00 06 00 06 00 00 ff e1 1d aa 45 78 69 66 00 00 4d 4d 00 2a 00 00 00 08 00 08 01 12 00 03 00 00 00 01 00 01 ... 35484 more bytes>,
-			size: 35534
-		}
-		*/
-
 		// Buscar que el email no este en uso
 		const emailCheck = await User.findOne({ where: { email } })
 		if (emailCheck)
@@ -65,23 +43,28 @@ passport.use('signup', new LocalStrategy({
 		if (usuarioCheck)
 			return done(null, false, { message: 'Ese usuario ya esta en uso' })
 
-		if (req.file) {
-			req.body.avatarUrl = await uploadAvatar(req.file)
-		} else {
-			req.body.avatarUrl = null
-		}
+		// Subir el avatar al firestore storage
+		let avatarUrl = null
 
 		// Hashear contraseña
 		const passHash = await bcrypt.hash(password, 8)
 
 		// Crear el usuario
-		const newUser = await User.create({
+		var newUser = await User.create({
 			nombre: req.body.nombre,
 			usuario: req.body.usuario,
 			email,
-			avatar: req.body.avatarUrl,
+			avatar: avatarUrl,
 			password: passHash
 		})
+
+		// Modifica el usuario con el avatar
+		if (req.file) {
+			avatarUrl = await uploadAvatar(newUser.id, req.file)
+			newUser.avatar = avatarUrl
+			await newUser.save()
+		}
+
 		return done(null, newUser)
 	}
 ))

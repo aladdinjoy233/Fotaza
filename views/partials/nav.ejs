@@ -1,0 +1,47 @@
+<nav id="app-nav">
+	<p>{{ user.nombre || 'Sin nombre' }}</p>
+	<p>{{ user.email || 'Sin email' }}</p>
+	<p>{{ user.usuario || 'Sin usuario' }}</p>
+
+	<div class="container">
+		<img :src="user.avatar || 'img/user.svg'" alt="">
+	</div>
+</nav>
+
+<script>
+const userDefault = {
+	id: null,
+	nombre: '',
+	email: '',
+	usuario: '',
+	avatar: ''
+}
+var vueApp = new Vue({
+	el: "#app-nav",
+
+	data: {
+		user: JSON.parse(JSON.stringify(userDefault)),
+	},
+
+	methods: {
+
+		obtenerUsuario() {
+			const vm = this
+			if (!userId) return
+
+			fetch(`/user/get/${userId}`)
+				.then(res => res.json())
+				.then(data => {
+					Object.assign(vm.user, data)
+				})
+				.catch(err => console.log(err));
+		},
+
+	},
+
+	mounted() {
+		const vm = this
+		vm.obtenerUsuario()
+	}
+})
+</script>

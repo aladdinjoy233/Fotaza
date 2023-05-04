@@ -13,6 +13,10 @@
 		<script type="module" defer src="/js/<%=script%>.vue.js"></script>
 	<%}}%>
 
-	<script> var baseUrl = "<%= baseUrl %>" </script>
+	<script>
+		// Set global variables
+		const baseUrl = "<%= baseUrl %>"
+		const userId = Number("<%= userId %>") || null
+	</script>
 
 </head>
