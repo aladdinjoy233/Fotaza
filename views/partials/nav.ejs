@@ -1,47 +1,84 @@
-<nav id="app-nav">
-	<p>{{ user.nombre || 'Sin nombre' }}</p>
-	<p>{{ user.email || 'Sin email' }}</p>
-	<p>{{ user.usuario || 'Sin usuario' }}</p>
+<nav id="app-nav" class="partial-nav">
+	<div class="container nav-container">
 
-	<div class="container">
-		<img :src="user.avatar || 'img/user.svg'" alt="">
+		<a class="nav-title btn btn-link" href="/">Fotaza</a>
+
+		<div class="nav-search">
+			<div class="input-group">
+				<div class="input-btn-group">
+					<input type="text" class="form-control" placeholder="Search">
+					<button type="button" class="icon-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+				</div>
+			</div>
+		</div>
+
+		<div class="nav-profile">
+			<!-- First a button, if there is no userID -->
+			<a v-if="!user.id" class="btn btn-link" href="/auth#login">Log-in</a>
+
+			<!-- If there is a userID, then dropdown -->
+			<div v-else class="dropdown">
+				<div class="dropdown-toggle" @click="dropdown = !dropdown">
+					<img :src="user.avatar || 'img/user.svg'" alt="">
+				</div>
+
+				<div class="dropdown-content" v-show="dropdown">
+					<div class="datos-perfil">
+						<p class="datos-nombre">{{ user.nombre || 'Sin nombre' }}</p>
+						<p class="datos-usuario">{{ user.usuario || 'Sin usuario' }}</p>
+					</div>
+					<a class="btn btn-link" href="/">Ver perfil</a>
+					<a class="btn btn-link" href="/">Editar perfil</a>
+					<a class="btn btn-link" href="/auth/logout">Cerrar sesion</a>
+				</div>
+			</div>
+		</div>
+
 	</div>
+
 </nav>
 
 <script>
-const userDefault = {
-	id: null,
-	nombre: '',
-	email: '',
-	usuario: '',
-	avatar: ''
-}
-var vueApp = new Vue({
-	el: "#app-nav",
+	const userDefault = {
+		id: null,
+		nombre: '',
+		email: '',
+		usuario: '',
+		avatar: ''
+	}
+	const vueApp = new Vue({
+		el: "#app-nav",
 
-	data: {
-		user: JSON.parse(JSON.stringify(userDefault)),
-	},
+		data: {
+			user: JSON.parse(JSON.stringify(userDefault)),
 
-	methods: {
-
-		obtenerUsuario() {
-			const vm = this
-			if (!userId) return
-
-			fetch(`/user/get/${userId}`)
-				.then(res => res.json())
-				.then(data => {
-					Object.assign(vm.user, data)
-				})
-				.catch(err => console.log(err));
+			dropdown: false
 		},
 
-	},
+		methods: {
 
-	mounted() {
-		const vm = this
-		vm.obtenerUsuario()
-	}
-})
+			async obtenerUsuario() {
+				const vm = this
+				if (!userId) return
+
+				const user = await getUser()
+				if (user != null) Object.assign(vm.user, user)
+			},
+
+		},
+
+		mounted() {
+			const vm = this
+			vm.obtenerUsuario()
+
+			// Cuando hacen click afuera del toggle, desaparece el dropdown
+			window.onclick = e => {
+				if (!e.target.matches('.dropdown-toggle') && !e.target.matches('img')) {
+					vm.dropdown = false
+				}
+			}
+
+			console.log(vm.user)
+		}
+	})
 </script>
