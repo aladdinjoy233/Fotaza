@@ -417,6 +417,9 @@ img {
   border: 1px solid var(--clr-grey-hover);
   padding: 0.1875rem;
   text-align: right;
+  box-shadow: -1px 6px 18px -1px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: -1px 6px 18px -1px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: -1px 6px 18px -1px rgba(0, 0, 0, 0.3);
 }
 
 .partial-nav .nav-container .nav-profile .dropdown .dropdown-content > * {
@@ -441,17 +444,17 @@ img {
   font-size: 12px;
 }
 
-.partial-nav .nav-container .nav-profile .dropdown .dropdown-content > a.btn-link, .partial-nav .nav-container .nav-profile .dropdown .dropdown-content > a.btn-link-danger {
+.partial-nav .nav-container .nav-profile .dropdown .dropdown-content > .btn-link, .partial-nav .nav-container .nav-profile .dropdown .dropdown-content > .btn-link-danger {
   cursor: pointer;
   -webkit-transition: none;
   transition: none;
 }
 
-.partial-nav .nav-container .nav-profile .dropdown .dropdown-content > a.btn-link:hover, .partial-nav .nav-container .nav-profile .dropdown .dropdown-content > a.btn-link-danger:hover {
+.partial-nav .nav-container .nav-profile .dropdown .dropdown-content > .btn-link:hover, .partial-nav .nav-container .nav-profile .dropdown .dropdown-content > .btn-link-danger:hover {
   background-color: var(--clr-primary-dark-bg);
 }
 
-.partial-nav .nav-container .nav-profile .dropdown .dropdown-content > a.btn-link::after, .partial-nav .nav-container .nav-profile .dropdown .dropdown-content > a.btn-link-danger::after {
+.partial-nav .nav-container .nav-profile .dropdown .dropdown-content > .btn-link::after, .partial-nav .nav-container .nav-profile .dropdown .dropdown-content > .btn-link-danger::after {
   content: none;
 }
 

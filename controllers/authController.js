@@ -31,6 +31,11 @@ exports.finishLastSteps = async (req, res, next) => {
 	if (!id || !usuario || !nombre)
 		return res.status(400).json({error: true, errorMsg: 'Faltan datos'})
 
+	// Verificar que el usuario no tenga espacios
+	usuario = usuario.trim()
+	if (usuario.indexOf(' ') >= 0)
+		return res.status(400).json({error: true, errorMsg: 'Usuario no puede contener espacios'})
+
 	const user = await User.findByPk(id)
 
 	if (!user)

@@ -115,6 +115,12 @@ var vueApp = new Vue({
 				err = true
 			}
 
+			vm.signupDetails.usuario = vm.signupDetails.usuario.trim()
+			if (vm.signupDetails.usuario.indexOf(' ') >= 0) {
+				formError('#usuario', 'No puede contener espacios')
+				err = true
+			}
+
 			if (vm.signupDetails.nombre == '') {
 				formError('#nombre', 'Campo vacio')
 				err = true
@@ -154,7 +160,14 @@ var vueApp = new Vue({
 		submitForm(login = false) {
 			const vm = this
 
-			const err = login ? vm.validateLogin() : (vm.validateSignup() && vm.validateSignupSecondStep())
+			let err
+			if (login) {
+				err = vm.validateLogin()
+			} else {
+				const validStepOne = vm.validateSignup();
+				const validStepTwo = vm.validateSignupSecondStep();
+				err = validStepOne || validStepTwo
+			}
 			if (err) return
 
 			let formData;

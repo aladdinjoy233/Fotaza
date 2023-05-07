@@ -83,6 +83,12 @@
 					err = true
 				}
 
+				vm.signupDetails.usuario = vm.signupDetails.usuario.trim()
+				if (vm.signupDetails.usuario.indexOf(' ') >= 0) {
+					formError('#usuario', 'No puede contener espacios')
+					err = true
+				}
+
 				if (vm.signupDetails.nombre == '') {
 					formError('#nombre', 'Campo vacio')
 					err = true

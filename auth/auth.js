@@ -29,6 +29,11 @@ passport.use('signup', new LocalStrategy({
 		if (req.body.usuario == '')
 			return done(null, false, { message: 'Campo usuario vacio' })
 
+		// Verificar que el usuario no tenga espacios
+		req.body.usuario = req.body.usuario.trim()
+		if (req.body.usuario.indexOf(' ') >= 0)
+			return done(null, false, { message: 'No puede contener espacios' })
+
 		// Verificar que la contraseñas coincidan
 		if (req.body.password != req.body.confirmPassword)
 			return done(null, false, { message: 'Las contraseñas no coinciden' })
