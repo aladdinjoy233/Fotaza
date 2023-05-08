@@ -34,6 +34,15 @@ passport.use('signup', new LocalStrategy({
 		if (req.body.usuario.indexOf(' ') >= 0)
 			return done(null, false, { message: 'No puede contener espacios' })
 
+		// Verificar que el usuario no tenga caracteres especiales
+		const usernameRegex = /^[a-zA-Z0-9_-]+$/
+		if (!usernameRegex.test(req.body.usuario))
+			return done(null, false, { message: 'No puede contener caracteres especiales' })
+
+		// Verificar que el usuario no sea edit
+		if (req.body.usuario.toLowerCase() == 'edit')
+			return done(null, false, { message: 'Nombre usuario no permitido' })
+
 		// Verificar que la contraseñas coincidan
 		if (req.body.password != req.body.confirmPassword)
 			return done(null, false, { message: 'Las contraseñas no coinciden' })

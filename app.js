@@ -42,6 +42,7 @@ app.use(getUserId);
 app.use('/', indexRouter);
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
+app.use('/profile', userRouter);
 
 // Conectar a la db
 sequelize.sync({ force: false })

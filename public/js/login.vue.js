@@ -121,6 +121,19 @@ var vueApp = new Vue({
 				err = true
 			}
 
+			// Mas que nada por las rutas
+			const usernameRegex = /^[a-zA-Z0-9_-]+$/
+			if (!usernameRegex.test(vm.signupDetails.usuario)) {
+				formError('#usuario', 'No puede contener caracteres especiales')
+				err = true
+			}
+
+			// Para el editar, asi no se confunde la ruta
+			if (vm.signupDetails.usuario.toLowerCase() == 'edit') {
+				formError('#usuario', 'Usuario no permitido')
+				err = true
+			}
+
 			if (vm.signupDetails.nombre == '') {
 				formError('#nombre', 'Campo vacio')
 				err = true

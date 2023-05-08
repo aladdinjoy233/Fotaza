@@ -19,7 +19,7 @@
 			<!-- If there is a userID, then dropdown -->
 			<div v-else class="dropdown">
 				<div class="dropdown-toggle" @click="dropdown = !dropdown">
-					<img :src="user.avatar || 'img/user.svg'" alt="">
+					<img :src="user.avatar || '/img/user.svg'" alt="">
 				</div>
 
 				<div class="dropdown-content" v-show="dropdown">
@@ -27,8 +27,8 @@
 						<p class="datos-nombre">{{ user.nombre || 'Sin nombre' }}</p>
 						<p class="datos-usuario">{{ user.usuario || 'Sin usuario' }}</p>
 					</div>
-					<a class="btn btn-link" href="/">Ver perfil</a>
-					<a class="btn btn-link" href="/">Editar perfil</a>
+					<a class="btn btn-link" :href="`/profile/${user.usuario}`">Ver perfil</a>
+					<a class="btn btn-link" href="/profile/edit">Editar perfil</a>
 					<button class="btn btn-link" @click="logout">Cerrar sesion</button>
 				</div>
 			</div>

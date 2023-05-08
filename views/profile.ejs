@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+	<%- include('partials/head') %>
+
+	<% 
+		const dateObj = user.createdAt
+		const day = dateObj.getDate().toString().padStart(2, "0")
+		const month = (dateObj.getMonth() + 1).toString().padStart(2, "0")
+		const year = dateObj.getFullYear()
+		const createdAt = `${day}/${month}/${year}`
+	%>
+<body>
+	<%- include('partials/nav') %>
+
+	<div id="app" class="profile-page">
+		<div class="container">
+			<div class="user-data">
+				<div class="user-data-avatar">
+					<img src="<%= user.avatar || '/img/user.svg' %>" alt="">
+				</div>
+				<div class="user-data-content">
+					<div class="user-name">
+						<span><%= user.nombre %></span>
+						<% if (isOwnAccount) { %>
+							<a href="/profile/edit" class="btn btn-link"><i class="fa-solid fa-pen-to-square"></i></a>
+						<% } %>
+					</div>
+					<div class="user-user"><%= user.usuario %></div>
+					<div class="user-created"><span>Usuario desde</span> <%= createdAt %></div>
+				</div>
+			</div>
+		</div>
+
+		<div class="content-divider"></div>
+	</div>
+	
+</body>
+</html>

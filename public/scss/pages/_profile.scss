@@ -1,0 +1,42 @@
+.profile-page {
+
+	.user-data {
+		display: flex;
+		justify-content: center;
+		gap: 2rem;
+		margin-top: 2rem;
+
+		.user-data-avatar {
+			width: 5rem;
+			height: 5rem;
+			border-radius: 50%;
+			overflow: hidden;
+			display: grid;
+			place-items: center;
+
+			outline: 2px solid var(--clr-primary);
+			outline-offset: 3px;
+		}
+
+		.user-data-content {
+			.user-name {
+				font-size: 1.5rem;
+				display: flex;
+				justify-content: space-between;
+
+				.btn-link::after { content: none; }
+			}
+
+			.user-created span{
+				color: #b3b3b3;
+				font-size: 0.75rem;
+			}
+		}
+	}
+
+	.content-divider {
+		width: 95%;
+		margin: 2rem auto;
+		border-bottom: 1px solid var(--clr-grey);
+	}
+}
