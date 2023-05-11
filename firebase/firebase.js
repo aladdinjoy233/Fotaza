@@ -1,5 +1,5 @@
 var { initializeApp } = require('firebase/app');
-var { getStorage, ref, uploadBytes, getDownloadURL } = require('firebase/storage');
+var { getStorage, ref, uploadBytes, deleteObject, getDownloadURL } = require('firebase/storage');
 const { firebaseConfig } = require('../config');
 const path = require('path');
 const { randomBytes } = require('crypto');
@@ -27,4 +27,38 @@ exports.uploadAvatar = async (userId, file) => {
 		console.log(error);
 		return null;
 	}
+}
+
+exports.updateAvatar = async (userId, file, downloadUrl) => {
+
+	const isDeleted = await this.deleteAvatar(downloadUrl);
+	
+	if (isDeleted) {
+		const newDownloadUrl = await this.uploadAvatar(userId, file);
+		return newDownloadUrl;
+	} else {
+		return null;
+	}
+}
+
+exports.deleteAvatar = async (downloadUrl) => {
+	// Parse the download URL too get the storage reference path
+	const storageRef = ref(storage, getFileFromURL(downloadUrl));
+
+	// Delete the object
+	try {
+		await deleteObject(storageRef);
+		return true;
+	} catch (error) {
+		console.log(error);
+		return false;
+	}
+}
+
+function getFileFromURL(fileURL) {
+	const fSlashes = fileURL.split('/');
+  const fQuery = fSlashes[fSlashes.length - 1].split('?');
+  const segments = fQuery[0].split('%2F');
+  const fileName = segments.join('/');
+  return fileName;
 }

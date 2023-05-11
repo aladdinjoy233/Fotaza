@@ -6,7 +6,68 @@
 <body>
 	<%- include('partials/nav') %>
 
-	<div id="app" class="edit-profile-page"></div>
+	<div id="app" class="edit-profile-page">
+		<div class="container">
+
+			<div class="form-width-constraint">
+				<h1>Edit Profile</h1>
+				<div>
+					<p>Email: {{ user.email }}</p>
+				</div>
+				<form id="edit-user-form" @submit.prevent="submitForm">
+					<!-- Seccion de la foto -->
+					<div class="input-group">
+						<label for="avatar">Foto perfil</label>
+						<div class="flex-row-group">
+							<label for="avatar" class="avatar-input-label">
+								<img :src="user.avatar.url || '/img/user.svg'">
+								<div class="hover-overlay"><i class="fa-solid fa-camera"></i></div>
+							</label>
+							<Transition name="resetAvatar">
+								<button type="button" class="btn btn-link-danger" v-if="user.avatar.url" @click="resetAvatar"><i class="fa-solid fa-trash"></i></button>
+							</Transition>
+						</div>
+						<input type="file" name="avatar" id="avatar" accept="image/*" @change="uploadImage" hidden>
+					</div>
+					<!-- Seccion detalles usuario -->
+					<div class="input-group">
+						<label for="nombre">Nombre</label>
+						<input type="text" name="nombre" id="nombre" v-model="user.nombre">
+					</div>
+					<div class="input-group">
+						<label for="usuario">Usuario</label>
+						<input type="text" name="usuario" id="usuario" v-model="user.usuario">
+					</div>
+					<!-- Seccion de contraseña -->
+					<div class="collapsable-div" :class="{ open: showCollapsePassword }">
+						<div class="collapsable-title" @click="showCollapsePassword = !showCollapsePassword">
+							<span>Modificar contraseña</span>
+							<i class="fa-solid fa-chevron-down"></i>
+						</div>
+						<div class="collapsable-content">
+							<div class="input-group">
+								<label for="pass">Password</label>
+								<div class="input-btn-group">
+									<input :type="inputTypePassword ? 'password' : 'text'" name="pass" id="pass" v-model="details.password">
+									<button @click="inputTypePassword = !inputTypePassword" type="button" class="icon-btn"><i class="fa-solid fa-eye"></i></button>
+								</div>
+							</div>
+							<div class="input-group">
+								<label for="pass-confirm">Confirm Password</label>
+								<input type="password" name="pass-confirm" id="pass-confirm" v-model="details.confirmPassword">
+							</div>
+						</div>
+					</div>
+					<button type="submit" class="btn btn-primary">Guardar</button>
+				</form>
+			</div>
+
+		</div>
+	</div>
+
+	<script>
+		const user = JSON.parse('<%- JSON.stringify(user) %>');
+	</script>
 	
 </body>
 </html>

@@ -1,0 +1,96 @@
+.edit-profile-page {
+	.container {
+		margin-top: 2rem;
+
+		.form-width-constraint {
+			width: 100%;
+			max-width: 32rem;
+			margin: 0 auto;
+		}
+
+		form {
+			margin-top: 2rem;
+			display: flex;
+			flex-direction: column;
+			gap: 1rem;
+			padding-bottom: 3rem;
+
+			.avatar-input-label {
+				position: relative;
+				width: 6.5rem;
+				height: 6.5rem;
+				border-radius: 50%;
+				overflow: hidden;
+				cursor: pointer;
+				margin-top: .5rem;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+		
+				outline: 2px solid var(--clr-primary);
+				outline-offset: 3px;
+		
+				.hover-overlay {
+					display: grid;
+					place-content: center;
+					background-color: rgba(0, 0, 0, 0.75);
+					color: white;
+					font-size: 1.75rem;
+					opacity: 0;
+					transition: opacity 150ms ease;
+					width: 100%;
+					height: 100%;
+					pointer-events: none;
+					position: absolute;
+				}
+		
+				&:hover .hover-overlay { opacity: 1; }
+			}
+
+			.collapsable-div {
+				background-color: var(--clr-grey-dark);
+				border-radius: var(--border-radius);
+				padding: .625rem;
+
+				.collapsable-title {
+					cursor: pointer;
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+
+					i {
+						transform: rotate(0deg);
+						transition: transform 200ms ease;
+					}
+				}
+
+				&.open .collapsable-title i { transform: rotate(180deg); }
+
+				.collapsable-content {
+					max-height: 0px;
+					overflow: hidden;
+					transition: max-height 500ms ease;
+					display: flex;
+					flex-direction: column;
+					gap: 1rem;
+
+					.input-group:first-child {
+						margin-top: 1rem;
+					}
+
+					.input-group:last-child {
+						margin-bottom: 1rem;
+					}
+				}
+
+				&.open .collapsable-content {
+					max-height: 500px;
+				}
+			}
+
+			.btn-primary {
+				width: fit-content;
+			}
+		}
+	}
+}

@@ -102,7 +102,7 @@ var vueApp = new Vue({
 				err = true
 			}
 
-			return err			
+			return err
 		},
 
 		validateSignupSecondStep() {
