@@ -5,6 +5,17 @@
 	<%- include('partials/nav') %>
 
 	<div id="app" class="home-page">
+
+		<div class="post-container">
+
+			<div v-for="post in posts" :key="post.id">
+				<post-component :post="post"></post-component>
+			</div>
+
+			<div ref="loadMore"></div>
+
+		</div>
+
 	</div>
 	
 </body>

@@ -140,8 +140,6 @@ var vueApp = new Vue({
 			} else {
 				formData.append('avatar', vm.user.avatar.url)
 			}
-			
-			showAlert('Usuario', 'Guardando...')
 
 			fetch('/user/edit', {
 				method: 'POST',

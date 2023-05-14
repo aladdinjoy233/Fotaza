@@ -55,3 +55,21 @@ img {
 	max-width: 100%;
 	height: auto;
 }
+
+// Generate a custom scrollbar
+::-webkit-scrollbar {
+	width: 10px;
+}
+
+::-webkit-scrollbar-track {
+	background: var(--dark-bg);
+	border-left: 1px solid var(--clr-grey-dark);
+}
+
+::-webkit-scrollbar-thumb {
+	background: var(--clr-grey-dark);
+
+	&:hover {
+		background: var(--clr-grey);
+	}
+}
