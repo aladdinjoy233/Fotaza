@@ -1,37 +1,41 @@
+<div class="occupy-space"></div>
+
 <nav id="app-nav" class="partial-nav">
 	<div class="container nav-container">
 
 		<a class="nav-title btn btn-link" href="/">Fotaza</a>
 
-		<div class="nav-search">
-			<div class="input-group">
-				<div class="input-btn-group">
-					<input type="text" class="form-control" placeholder="Search">
-					<button type="button" class="icon-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
-				</div>
-			</div>
-		</div>
+		<div class="nav-right">
 
-		<div class="nav-profile">
-			<!-- First a button, if there is no userID -->
-			<a v-if="!user.id" class="btn btn-link" href="/auth#login">Log-in</a>
-
-			<!-- If there is a userID, then dropdown -->
-			<div v-else class="dropdown">
-				<div class="dropdown-toggle" @click="dropdown = !dropdown">
-					<img :src="user.avatar || '/img/user.svg'" alt="">
-				</div>
-
-				<div class="dropdown-content" v-show="dropdown">
-					<div class="datos-perfil">
-						<p class="datos-nombre">{{ user.nombre || 'Sin nombre' }}</p>
-						<p class="datos-usuario">{{ user.usuario || 'Sin usuario' }}</p>
+			<div class="nav-search">
+				<div class="input-group">
+					<div class="input-btn-group">
+						<input type="text" class="form-control" placeholder="Search">
+						<button type="button" class="icon-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
 					</div>
-					<a class="btn btn-link" :href="`/profile/${user.usuario}`">Ver perfil</a>
-					<a class="btn btn-link" href="/profile/edit">Editar perfil</a>
-					<button class="btn btn-link" @click="logout">Cerrar sesion</button>
 				</div>
 			</div>
+
+			<div class="nav-profile">
+				<!-- First a button, if there is no userID -->
+				<a v-if="!user.id" class="btn btn-link" href="/auth#login">Log-in</a>
+				<!-- If there is a userID, then dropdown -->
+				<div v-else class="dropdown">
+					<div class="dropdown-toggle" @click="dropdown = !dropdown">
+						<img :src="user.avatar || '/img/user.svg'" alt="">
+					</div>
+					<div class="dropdown-content" v-show="dropdown">
+						<div class="datos-perfil">
+							<p class="datos-nombre">{{ user.nombre || 'Sin nombre' }}</p>
+							<p class="datos-usuario">{{ user.usuario || 'Sin usuario' }}</p>
+						</div>
+						<a class="btn btn-link" :href="`/profile/${user.usuario}`">Ver perfil</a>
+						<a class="btn btn-link" href="/profile/edit">Editar perfil</a>
+						<button class="btn btn-link" @click="logout">Cerrar sesion</button>
+					</div>
+				</div>
+			</div>
+
 		</div>
 
 	</div>

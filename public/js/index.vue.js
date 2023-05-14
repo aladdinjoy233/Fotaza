@@ -1,10 +1,14 @@
 import { PostComponent } from "./components/PostComponent.js"
+import { LoadComponent } from "./components/LoadComponent.js"
+import { SideNavComponent } from "./components/SideNavComponent.js"
 
 var vueApp = new Vue({
 	el: "#app",
 
 	components: {
-		'post-component': PostComponent
+		'post-component': PostComponent,
+		'load-component': LoadComponent,
+		'side-nav': SideNavComponent
 	},
 
 	data: {
@@ -30,23 +34,27 @@ var vueApp = new Vue({
 				imageSrc: "https://placedog.net/400/400",
 				rating: 2,
 				user: JSON.parse(localStorage.getItem("user")),
+				numberOfComments: 1
 			}, {
 				id: Math.floor(Math.random() * 100),
 				description: "This is a caption",
 				imageSrc: "https://placedog.net/300/600",
 				rating: 2,
 				user: JSON.parse(localStorage.getItem("user")),
+				numberOfComments: 0
 			}, {
 				id: Math.floor(Math.random() * 100),
 				description: "Práctica desde el lugar más lindo del planeta 🏟️💙💛💙",
 				imageSrc: "https://placedog.net/700/300",
 				tags: ['DaleBoca', 'Bombonera', 'Limpieza', 'Mantenimiento', 'VamosBoca', 'La12'],
 				user: JSON.parse(localStorage.getItem("user")),
+				numberOfComments: 15
 			}, {
 				id: Math.floor(Math.random() * 100),
 				description: "This is a caption",
 				imageSrc: "https://placedog.net/700/700",
 				user: JSON.parse(localStorage.getItem("user")),
+				numberOfComments: 3
 			})
 
 			vm.page++
@@ -55,7 +63,6 @@ var vueApp = new Vue({
 
 		handleScroll() {
 			const vm = this;
-			// const endOfList = this.$refs.loadMore.offsetTop + this.$refs.loadMore.clientHeight
 			const endOfList = vm.$refs.loadMore.offsetTop
 			const scrollTop = window.scrollY + window.innerHeight
 

@@ -6,13 +6,18 @@
 
 	<div id="app" class="home-page">
 
+		<side-nav selected="home"></side-nav>
+
 		<div class="post-container">
 
-			<div v-for="post in posts" :key="post.id">
-				<post-component :post="post"></post-component>
+			<post-component v-for="post in posts" :key="post.id" :post="post"></post-component>
+
+			<div class="loading-container" ref="loadMore">
+				<Transition name="showLoad">
+					<load-component v-if="loading"></load-component>
+				</Transition>
 			</div>
 
-			<div ref="loadMore"></div>
 
 		</div>
 

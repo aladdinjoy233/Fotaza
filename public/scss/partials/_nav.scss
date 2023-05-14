@@ -1,11 +1,31 @@
+.occupy-space {
+	padding-top: 3.0625rem;
+}
+
 .partial-nav {
 	border-bottom: 1px solid var(--clr-grey-dark);
+
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 100;
+
+	// Blurry-background effect
+	background-color: rgba(28, 28, 28, 0.5);
+	backdrop-filter: blur(10px);
 
 	.nav-container {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 		gap: 1rem;
+
+		.nav-right {
+			display: flex;
+			align-items: center;
+			gap: 2rem;
+		}
 
 		.nav-title {
 			font-size: 1.75rem;
@@ -22,6 +42,10 @@
 				&:hover {
 					color: var(--clr-grey-light-hover);
 				}
+			}
+
+			input {
+				background-color: var(--dark-bg);
 			}
 		}
 
