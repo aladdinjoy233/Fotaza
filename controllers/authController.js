@@ -26,7 +26,7 @@ exports.lastSteps = async (req, res, next) => {
 }
 
 exports.finishLastSteps = async (req, res, next) => {
-	const {id, usuario, nombre} = req.body
+	var {id, usuario, nombre} = req.body
 
 	if (!id || !usuario || !nombre)
 		return res.status(400).json({error: true, errorMsg: 'Faltan datos'})

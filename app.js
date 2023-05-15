@@ -45,7 +45,7 @@ app.use('/user', userRouter);
 app.use('/profile', userRouter);
 
 // Conectar a la db
-sequelize.sync({ force: false })
+sequelize.sync({ force: true })
 	.then(() => console.log('Conectado a la base de datos!'))
 	.catch(err => console.log(err));
 
