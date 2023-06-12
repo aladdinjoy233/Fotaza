@@ -20,6 +20,6 @@
 		"> 1%",
 		"last 2 versions"
 	],
-	"svg.preview.background": "transparent",
+	"svg.preview.background": "editor",
 	"px-to-rem.px-per-rem": 16
 }

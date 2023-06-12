@@ -15,6 +15,7 @@ require('./auth/auth');
 var indexRouter = require('./routes/index');
 var authRouter = require('./routes/auth');
 var userRouter = require('./routes/user');
+var photoRouter = require('./routes/photo');
 
 var app = express();
 
@@ -43,9 +44,10 @@ app.use('/', indexRouter);
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
 app.use('/profile', userRouter);
+app.use('/photo', photoRouter);
 
 // Conectar a la db
-sequelize.sync({ force: true })
+sequelize.sync({ force: false })
 	.then(() => console.log('Conectado a la base de datos!'))
 	.catch(err => console.log(err));
 

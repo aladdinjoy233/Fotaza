@@ -9,13 +9,13 @@ export const SideNavComponent = {
 		<div class="side-nav">
 			<div class="side-nav__list">
 
-				<a href="#" class="btn btn-link side-nav__item" :class="{ 'selected': selected == 'home' }" key="home">
-					<i class="fa-solid fa-house"></i> Home
+				<a href="${baseUrl}" class="btn btn-link side-nav__item" :class="{ 'selected': selected == 'home' }" key="home">
+					<i class="fa-solid fa-house"></i> Portada
 				</a>
-				<a href="#" class="btn btn-link side-nav__item" :class="{ 'selected': selected == 'tags' }" key="tags">
+				<a href="${baseUrl}" class="btn btn-link side-nav__item" :class="{ 'selected': selected == 'tags' }" key="tags">
 					<i class="fa-solid fa-hashtag"></i> Tags
 				</a>
-				<a href="#" class="btn btn-link side-nav__item" :class="{ 'selected': selected == 'crear' }" key="crear">
+				<a href="${baseUrl}/photo/" class="btn btn-link side-nav__item" :class="{ 'selected': selected == 'crear' }" key="crear">
 					<i class="fa-solid fa-circle-plus"></i> Crear
 				</a>
 
@@ -24,6 +24,7 @@ export const SideNavComponent = {
 	`,
 	data() {
 		return {
+			baseUrl: baseUrl
 		}
 	},
 	methods: {

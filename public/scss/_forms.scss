@@ -76,7 +76,9 @@
 		margin-bottom: 3px;
 	}
 
-	input {
+	input,
+	textarea,
+	select {
 		border-radius: var(--border-radius);
 		border: 1px solid var(--clr-grey);
 		padding: var(--btn-padding);
@@ -96,6 +98,12 @@
 			border-color: var(--clr-error);
 		}
 	}
+
+	select option {
+		background-color: var(--dark-bg);
+	}
+
+	textarea { resize: vertical; }
 
 	.invalid-feedback {
 		position: absolute;
@@ -124,6 +132,83 @@
 			cursor: pointer;
 
 			&:hover { opacity: .75 }
+		}
+	}
+
+	// Input group checkbox
+	.check {
+		cursor: pointer;
+		position: relative;
+		width: 18px;
+		height: 18px;
+		-webkit-tap-highlight-color: transparent;
+		transform: translate3d(0, 0, 0);
+
+		&:before {
+			content: "";
+			position: absolute;
+			top: -15px;
+			left: -15px;
+			width: 48px;
+			height: 48px;
+			border-radius: 50%;
+			background: rgba(34,50,84,0.03);
+			opacity: 0;
+			transition: opacity 0.2s ease;
+		}
+
+		svg {
+			position: relative;
+			z-index: 1;
+			fill: none;
+			stroke-linecap: round;
+			stroke-linejoin: round;
+			stroke: var(--clr-primary-hover);
+			stroke-width: 1.5;
+			transform: translate3d(0, 0, 0);
+			transition: all 0.2s ease;
+
+			path {
+				stroke-dasharray: 60;
+				stroke-dashoffset: 0;
+			}
+
+			polyline {
+				stroke-dasharray: 22;
+				stroke-dashoffset: 66;
+			}
+		}
+
+		&:hover {
+
+			&:before { opacity: 1; }
+
+			svg { stroke: var(--clr-primary); }
+		}
+	}
+
+	.checkbox-input {
+		display: none;
+
+		&:checked + .check svg {
+			stroke: var(--clr-primary);
+
+			path {
+				stroke-dashoffset: 60;
+				transition: all 0.3s linear;
+			}
+
+			polyline {
+				stroke-dashoffset: 42;
+				transition: all 0.2s linear;
+				transition-delay: 0.15s;
+			}
+		}
+
+		&:disabled + .check {
+			cursor: initial;
+
+			svg { stroke: var(--clr-grey-light); }
 		}
 	}
 }

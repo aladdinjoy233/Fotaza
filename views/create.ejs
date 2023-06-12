@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('partials/head') %>
+
+	<body>
+		<%- include('partials/nav') %>
+
+			<div id="app" class="create-page">
+
+				<side-nav selected="crear"></side-nav>
+
+				<div class="container">
+					<form id="create-photo-form" @submit.prevent="submitForm">
+
+						<!-- Seccion de la foto -->
+						<div class="input-group">
+							<label for="file_path">Foto</label>
+							<div class="flex-row-group">
+								<label for="file_path" class="avatar-input-label">
+									<img v-if="photo.file_path" :src="photo.file_path" alt="Photo">
+									<div v-else class="empty-photo">Agregar foto</div>
+									<div class="hover-overlay"><i class="fa-solid fa-camera"></i></div>
+								</label>
+							</div>
+							<input type="file" name="file_path" id="file_path" accept="image/*" @change="uploadImage" hidden>
+						</div>
+
+						<!-- Seccion de detalles de la foto -->
+						<div class="input-group">
+							<label for="title">Titulo</label>
+							<input type="text" name="title" id="title" v-model="photo.title">
+						</div>
+
+						<div class="input-group">
+							<label for="category_id">Categoría</label>
+							<select name="category_id" id="category_id" v-model="photo.category_id">
+								<option value="null" selected disabled>Seleccione una categoría</option>
+								<option v-for="category in categories" :key="category.id" :value="category.id">{{ category.category_name }}</option>
+							</select>
+						</div>
+
+						<div class="input-group">
+							<label for="rights_id">Derechos</label>
+							<select name="rights_id" id="rights_id" v-model="photo.rights_id">
+								<option value="null" selected disabled>Seleccione un derecho</option>
+								<option v-for="right in rights" :key="right.id" :value="right.id">{{ right.rights_name }}</option>
+							</select>
+						</div>
+
+						<div class="input-group">
+							<label for="is_private">Privado</label>
+							<input type="checkbox" class="checkbox-input" name="is_private" id="is_private" v-model="photo.is_private" :disabled="disablePrivate">
+							<label for="is_private" class="check">
+								<svg width="18px" height="18px" viewBox="0 0 18 18">
+									<path d="M1,9 L1,3.5 C1,2 2,1 3.5,1 L14.5,1 C16,1 17,2 17,3.5 L17,14.5 C17,16 16,17 14.5,17 L3.5,17 C2,17 1,16 1,14.5 L1,9 Z"></path>
+									<polyline points="1 9 7 14 15 4"></polyline>
+								</svg>
+						</label>
+						</div>
+
+						<button type="submit" class="btn btn-primary">Publicar</button>
+					</form>
+				</div>
+
+			</div>
+
+			<script>
+				const categories = JSON.parse(`<%- JSON.stringify(categories) %>`)
+				const rights = JSON.parse(`<%- JSON.stringify(rights) %>`)
+			</script>
+
+	</body>
+
+</html>

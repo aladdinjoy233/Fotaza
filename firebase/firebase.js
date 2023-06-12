@@ -9,6 +9,7 @@ const app = initializeApp(firebaseConfig);
 
 const storage = getStorage(app);
 
+// Funciones para subir el avatar
 exports.uploadAvatar = async (userId, file) => {
 	const { originalname, buffer } = file;
 
@@ -61,4 +62,25 @@ function getFileFromURL(fileURL) {
   const segments = fQuery[0].split('%2F');
   const fileName = segments.join('/');
   return fileName;
+}
+
+// Funciones para subir fotos
+exports.uploadPhoto = async (userId, file) => {
+	const { originalname, buffer } = file;
+
+	// Generate a random string
+	const randomString = randomBytes(6).toString('hex');
+	const ext = path.extname(originalname);
+
+	// Creates storage ref, if it exists, then overrides last file
+	const storageRef = ref(storage, `post_images/photo_${userId}_${randomString}${ext}`);
+
+	try {
+		await uploadBytes(storageRef, buffer);
+		const downloadUrl = await getDownloadURL(storageRef);
+		return downloadUrl;
+	} catch (error) {
+		console.log(error);
+		return null;
+	}
 }

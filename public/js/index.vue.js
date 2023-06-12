@@ -2,6 +2,14 @@ import { PostComponent } from "./components/PostComponent.js"
 import { LoadComponent } from "./components/LoadComponent.js"
 import { SideNavComponent } from "./components/SideNavComponent.js"
 
+const userDefault = {
+	id: null,
+	nombre: '',
+	email: '',
+	usuario: '',
+	avatar: ''
+}
+
 var vueApp = new Vue({
 	el: "#app",
 
@@ -12,6 +20,8 @@ var vueApp = new Vue({
 	},
 
 	data: {
+		user: JSON.parse(JSON.stringify(userDefault)),
+
 		posts: [],
 		page: 1,
 		limit: 10,
@@ -19,6 +29,14 @@ var vueApp = new Vue({
 	},
 
 	methods: {
+
+		async obtenerUsuario() {
+			const vm = this
+			if (!userId) return
+
+			const user = await getUser()
+			if (user != null) Object.assign(vm.user, user)
+		},
 
 		timeout(ms) { return new Promise(resolve => setTimeout(resolve, ms)) },
 
@@ -78,6 +96,7 @@ var vueApp = new Vue({
 
 	mounted() {
 		const vm = this
+		vm.obtenerUsuario()
 		vm.getPosts()
 
 		window.addEventListener("scroll", vm.handleScroll)

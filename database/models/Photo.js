@@ -21,9 +21,17 @@ Photo.init({
 		type: DataTypes.INTEGER,
 		allowNull: false,
 	},
-	description: {
+	title: {
 		type: DataTypes.STRING,
-		allowNull: true,
+		allowNull: false,
+	},
+	format: {
+		type: DataTypes.STRING,
+		allowNull: false,
+	},
+	resolution: {
+		type: DataTypes.STRING,
+		allowNull: false,
 	},
 	file_path: {
 		type: DataTypes.STRING,
