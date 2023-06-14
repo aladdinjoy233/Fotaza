@@ -47,7 +47,7 @@ exports.post = async (req, res, next) => {
 	
 	if (!photoUrl) return res.status(400).json({ error: true, errorMsg: 'Error al subir la foto' })
 
-	await Photo.create({
+	const photo = await Photo.create({
 		user_id,
 		category_id,
 		rights_id,
@@ -57,6 +57,24 @@ exports.post = async (req, res, next) => {
 		file_path: photoUrl,
 		is_private
 	})
+
+	let { tags } = JSON.parse(req.body.photoData)
+	tags = tags.slice(0, 3)
+
+	// Verificar que los tags no esten repetidos
+	const dbTags = []
+	for (const tag of tags) {
+		const existingTag = await Tag.findOne({ where: { tag_name: tag } })
+
+		if (existingTag) {
+			dbTags.push(existingTag)
+		} else {
+			const newTag = await Tag.create({ tag_name: tag })
+			dbTags.push(newTag)
+		}
+	}
+	
+	if (dbTags.length > 0) await photo.addTags(dbTags)
 
 	return res.redirect('/')
 }

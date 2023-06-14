@@ -268,6 +268,28 @@ img {
   opacity: .75;
 }
 
+.input-group .input-solid-btn-group {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  position: relative;
+}
+
+.input-group .input-solid-btn-group input {
+  width: 100%;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.input-group .input-solid-btn-group input ~ .btn {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-width: 1px;
+}
+
 .input-group .check {
   cursor: pointer;
   position: relative;
@@ -1424,4 +1446,38 @@ img {
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
+}
+
+.create-page .container form .tags-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: .5rem;
+  margin-top: .5rem;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.create-page .container form .tags-container .tag {
+  font-size: 0.875rem;
+  background-color: var(--clr-grey-dark);
+  border-radius: var(--border-radius);
+  padding: var(--btn-padding);
+  color: var(--clr-primary);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.create-page .container form .tags-container .tag .remove-tag {
+  font-size: 0.75rem;
+  cursor: pointer;
+  margin-left: .5rem;
+}
+
+.create-page .container form .tags-container .tag .remove-tag:hover {
+  opacity: 0.5;
 }

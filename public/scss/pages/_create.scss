@@ -48,6 +48,34 @@
 			.btn-primary {
 				width: fit-content;
 			}
+
+			
+			.tags-container {
+				display: flex;
+				gap: .5rem;
+				margin-top: .5rem;
+				flex-wrap: wrap;
+
+				.tag {
+					font-size: 0.875rem;
+					background-color: var(--clr-grey-dark);
+					border-radius: var(--border-radius);
+					padding: var(--btn-padding);
+					color: var(--clr-primary);
+					display: flex;
+					align-items: center;
+
+					.remove-tag {
+						font-size: 0.75rem;
+						cursor: pointer;
+						margin-left: .5rem;
+
+						&:hover {
+							opacity: 0.5;
+						}
+					}
+				}
+			}
 		}
 	}
 }

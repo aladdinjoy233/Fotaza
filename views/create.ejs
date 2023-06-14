@@ -39,6 +39,24 @@
 							</select>
 						</div>
 
+						<div class="tags-section">
+							<div class="input-group">
+								<label for="tag-input">Tags</label>
+								<div class="input-solid-btn-group">
+									<input type="text" name="tag-input" id="tag-input" v-model="tagText" ref="tagInput">
+									<button type="button" class="btn btn-primary" @click="addTag">Agregar</button>
+								</div>
+							</div>
+	
+							<div class="tags-container">
+								<span v-for="(tag, index) in tags" class="tag">
+									{{ tag }}
+									<span class="remove-tag" @click="removeTag(index)"><i class="fa-solid fa-xmark"></i></span>
+								</span>
+							</div>
+						</div>
+
+
 						<div class="input-group">
 							<label for="rights_id">Derechos</label>
 							<select name="rights_id" id="rights_id" v-model="photo.rights_id">

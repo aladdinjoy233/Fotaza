@@ -135,6 +135,24 @@
 		}
 	}
 
+	.input-solid-btn-group {
+		display: flex;
+		align-items: center;
+		position: relative;
+
+		input {
+			width: 100%;
+			border-top-right-radius: 0;
+			border-bottom-right-radius: 0;
+		}
+
+		input ~ .btn {
+			border-top-left-radius: 0;
+			border-bottom-left-radius: 0;
+			border-width: 1px;
+		}
+	}
+
 	// Input group checkbox
 	.check {
 		cursor: pointer;

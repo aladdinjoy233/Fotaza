@@ -31,7 +31,10 @@ var vueApp = new Vue({
 
 		photo: JSON.parse(JSON.stringify(photoDefault)),
 
-		disablePrivate: false
+		disablePrivate: false,
+		tagText: '',
+		tags: [],
+		maxTagsCount: 3
 	},
 
 	methods: {
@@ -56,6 +59,27 @@ var vueApp = new Vue({
 				vm.photo.file = file
 			}
 			reader.readAsDataURL(file)
+		},
+
+		addTag() {
+			const vm = this
+
+			let tag = vm.tagText.trim()
+			if (tag == '') return
+			if (vm.tags.length >= vm.maxTagsCount) {
+				showAlert('Etiquetas', `Máximo de ${vm.maxTagsCount} tags`, 'info')
+				return
+			}
+			tag = tag.replace(/^#+/, '')
+			tag = `#${tag}`
+
+			vm.tags.push(tag)
+			vm.tagText = ''
+		},
+
+		removeTag(index) {
+			const vm = this
+			vm.tags.splice(index, 1)
 		},
 
 		validateForm() {
@@ -88,17 +112,19 @@ var vueApp = new Vue({
 
 		submitForm() {
 			const vm = this
-			console.log(vm.photo)
-
 			const err = vm.validateForm()
 			if (err) return
+
+			let tags = vm.tags.slice(0, 3)
+			tags = tags.map(tag => tag = tag.replace(/^#+/, ''))
 
 			const photoData = {
 				title: vm.photo.title,
 				category_id: vm.photo.category_id,
 				rights_id: vm.photo.rights_id,
 				is_private: vm.photo.is_private,
-				user_id: vm.user.id
+				user_id: vm.user.id,
+				tags
 			}
 
 			const formData = new FormData()
@@ -138,6 +164,14 @@ var vueApp = new Vue({
 	mounted() {
 		const vm = this
 		vm.obtenerUsuario()
+
+		vm.$refs.tagInput.addEventListener('keydown', e => {
+			if (e.keyCode == 13) {
+				e.preventDefault()
+				vm.addTag()
+			}
+		})
+
 	},
 
 });
