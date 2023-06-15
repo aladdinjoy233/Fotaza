@@ -76,6 +76,43 @@
 					}
 				}
 			}
+
+			.collapsable-div {
+				background-color: var(--clr-grey-dark);
+				border-radius: var(--border-radius);
+				padding: .625rem;
+
+				.collapsable-title {
+					cursor: pointer;
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+
+					i {
+						transform: rotate(0deg);
+						transition: transform 200ms ease;
+					}
+				}
+
+				&.open .collapsable-title i { transform: rotate(180deg); }
+
+				.collapsable-content {
+					max-height: 0px;
+					overflow: hidden;
+					transition: max-height 500ms ease;
+					display: flex;
+					flex-direction: column;
+					gap: 1rem;
+
+					p {
+						margin-top: 1rem;
+					}
+				}
+
+				&.open .collapsable-content {
+					max-height: 500px;
+				}
+			}
 		}
 	}
 }

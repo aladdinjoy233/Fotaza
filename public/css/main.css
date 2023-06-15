@@ -1481,3 +1481,59 @@ img {
 .create-page .container form .tags-container .tag .remove-tag:hover {
   opacity: 0.5;
 }
+
+.create-page .container form .collapsable-div {
+  background-color: var(--clr-grey-dark);
+  border-radius: var(--border-radius);
+  padding: .625rem;
+}
+
+.create-page .container form .collapsable-div .collapsable-title {
+  cursor: pointer;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.create-page .container form .collapsable-div .collapsable-title i {
+  -webkit-transform: rotate(0deg);
+          transform: rotate(0deg);
+  -webkit-transition: -webkit-transform 200ms ease;
+  transition: -webkit-transform 200ms ease;
+  transition: transform 200ms ease;
+  transition: transform 200ms ease, -webkit-transform 200ms ease;
+}
+
+.create-page .container form .collapsable-div.open .collapsable-title i {
+  -webkit-transform: rotate(180deg);
+          transform: rotate(180deg);
+}
+
+.create-page .container form .collapsable-div .collapsable-content {
+  max-height: 0px;
+  overflow: hidden;
+  -webkit-transition: max-height 500ms ease;
+  transition: max-height 500ms ease;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 1rem;
+}
+
+.create-page .container form .collapsable-div .collapsable-content p {
+  margin-top: 1rem;
+}
+
+.create-page .container form .collapsable-div.open .collapsable-content {
+  max-height: 500px;
+}

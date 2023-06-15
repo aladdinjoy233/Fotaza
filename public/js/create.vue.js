@@ -34,7 +34,11 @@ var vueApp = new Vue({
 		disablePrivate: false,
 		tagText: '',
 		tags: [],
-		maxTagsCount: 3
+		maxTagsCount: 3,
+
+		showCollapseWatermark: false,
+		watermark: '',
+		watermarkTipo: 'ninguna'
 	},
 
 	methods: {
@@ -82,6 +86,29 @@ var vueApp = new Vue({
 			vm.tags.splice(index, 1)
 		},
 
+		configureWatermark() {
+			const vm = this
+			let watermark = '';
+
+			if (vm.watermarkTipo == 'ninguna' && !vm.photo.is_private) {
+				watermark = `Fotaza @${vm.user.usuario}`
+			}
+
+			if (vm.watermarkTipo == 'fotaza') {
+				watermark = `Fotaza @${vm.user.usuario}`
+			}
+
+			if (vm.watermarkTipo == 'usuario') {
+				watermark = `@${vm.user.usuario}`
+			}
+
+			if (vm.watermarkTipo == 'personalizable') {
+				watermark = vm.watermark
+			}
+
+			return watermark
+		},
+
 		validateForm() {
 			const vm = this
 			var err = false
@@ -118,13 +145,16 @@ var vueApp = new Vue({
 			let tags = vm.tags.slice(0, 3)
 			tags = tags.map(tag => tag = tag.replace(/^#+/, ''))
 
+			const watermark = vm.configureWatermark()
+
 			const photoData = {
 				title: vm.photo.title,
 				category_id: vm.photo.category_id,
 				rights_id: vm.photo.rights_id,
 				is_private: vm.photo.is_private,
 				user_id: vm.user.id,
-				tags
+				tags,
+				watermark
 			}
 
 			const formData = new FormData()

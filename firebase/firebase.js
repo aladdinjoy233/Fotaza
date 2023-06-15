@@ -65,8 +65,8 @@ function getFileFromURL(fileURL) {
 }
 
 // Funciones para subir fotos
-exports.uploadPhoto = async (userId, file) => {
-	const { originalname, buffer } = file;
+exports.uploadPhoto = async (userId, file, buffer) => {
+	const { originalname } = file;
 
 	// Generate a random string
 	const randomString = randomBytes(6).toString('hex');
