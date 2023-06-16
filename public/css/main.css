@@ -1537,3 +1537,78 @@ img {
 .create-page .container form .collapsable-div.open .collapsable-content {
   max-height: 500px;
 }
+
+.edit-page .container {
+  max-width: 30rem;
+}
+
+.edit-page .container form {
+  margin-top: 2rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 1rem;
+  padding-bottom: 3rem;
+}
+
+.edit-page .container form .photo-preview {
+  position: relative;
+  width: 100%;
+  height: auto;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  margin-top: .5rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.edit-page .container form .btn-primary {
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+
+.edit-page .container form .tags-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: .5rem;
+  margin-top: .5rem;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.edit-page .container form .tags-container .tag {
+  font-size: 0.875rem;
+  background-color: var(--clr-grey-dark);
+  border-radius: var(--border-radius);
+  padding: var(--btn-padding);
+  color: var(--clr-primary);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.edit-page .container form .tags-container .tag .remove-tag {
+  font-size: 0.75rem;
+  cursor: pointer;
+  margin-left: .5rem;
+}
+
+.edit-page .container form .tags-container .tag .remove-tag:hover {
+  opacity: 0.5;
+}

@@ -6,9 +6,6 @@ const PhotoComment = require('../database/models/PhotoComment')
 const PhotoRating = require('../database/models/PhotoRating')
 
 const sharp = require('sharp')
-const fs = require('fs')
-const os = require('os')
-const path = require('path')
 const { uploadPhoto } = require('../firebase/firebase')
 
 exports.createView = async (req, res, next) => {
@@ -84,6 +81,67 @@ exports.post = async (req, res, next) => {
 	}
 	
 	if (dbTags.length > 0) await photo.addTags(dbTags)
+
+	return res.redirect('/')
+}
+
+exports.edit = async (req, res, next) => {
+	const { photoId } = req.params
+
+	const photo = await Photo.findByPk(photoId)
+
+	if (!photo) return res.redirect('/')
+	if (photo.user_id != req.user.id) return res.redirect('/')
+
+	const categories = await Category.findAll({
+		attributes: ['id', 'category_name'],
+		order: [['category_name', 'ASC']]
+	})
+
+	const rights = await Right.findAll({
+		attributes: ['id', 'rights_name'],
+		order: [['rights_name', 'ASC']]
+	})
+
+	const tags = await photo.getTags({ attributes: ['tag_name'] })
+
+	res.render('edit', { title: 'Edit | Fotaza', scripts: ['edit'], photo, categories, rights, tags })
+}
+
+exports.editPost = async (req, res, next) => {
+	const { photo_id, user_id, title, category_id, rights_id, is_private } = req.body
+	let { tags } = req.body
+
+	if (!photo_id || !title || !category_id || !rights_id || is_private == undefined ) return res.status(400).json({ error: true, errorMsg: 'Faltan datos' })
+
+	if (!user_id) return res.status(400).json({ error: true, errorMsg: 'Foto sin usuario' })
+
+	// Verificar que la publicacion pertenece al usuario logeado
+	if (req.user.id != user_id) return res.status(400).json({ error: true, errorMsg: 'No estás autorizado' })
+
+	let photo = await Photo.findByPk(photo_id)
+	if (!photo) return res.status(400).json({ error: true, errorMsg: 'Foto no existe' })
+
+	// Actualizar los campos
+	photo = await photo.update({ title, category_id, rights_id, is_private })
+
+	// Actualizar tags
+	tags = tags.slice(0, 3)
+
+	// Verificar que los tags no esten repetidos
+	const dbTags = []
+	for (const tag of tags) {
+		const existingTag = await Tag.findOne({ where: { tag_name: tag } })
+
+		if (existingTag) {
+			dbTags.push(existingTag)
+		} else {
+			const newTag = await Tag.create({ tag_name: tag })
+			dbTags.push(newTag)
+		}
+	}
+	
+	await photo.setTags(dbTags)
 
 	return res.redirect('/')
 }
