@@ -25,7 +25,8 @@ var vueApp = new Vue({
 		posts: [],
 		page: 1,
 		limit: 10,
-		loading: false
+		loading: false,
+		hasMorePosts: true
 	},
 
 	methods: {
@@ -38,45 +39,27 @@ var vueApp = new Vue({
 			if (user != null) Object.assign(vm.user, user)
 		},
 
-		timeout(ms) { return new Promise(resolve => setTimeout(resolve, ms)) },
-
 		async getPosts() {
 			const vm = this
+			if (!vm.hasMorePosts) return
+
 			vm.loading = true
 
-			await this.timeout(2000)
+			fetch(`/photo/posts?page=${vm.page}&limit=${vm.limit}`)
+				.then(res => res.json())
+				.then(data => {
+					vm.posts.push(...data)
 
-			vm.posts.push({
-				id: Math.floor(Math.random() * 100),
-				description: "This is a caption",
-				imageSrc: "https://placedog.net/400/400",
-				rating: 2,
-				user: JSON.parse(localStorage.getItem("user")),
-				numberOfComments: 1
-			}, {
-				id: Math.floor(Math.random() * 100),
-				description: "This is a caption",
-				imageSrc: "https://placedog.net/300/600",
-				rating: 2,
-				user: JSON.parse(localStorage.getItem("user")),
-				numberOfComments: 0
-			}, {
-				id: Math.floor(Math.random() * 100),
-				description: "Práctica desde el lugar más lindo del planeta 🏟️💙💛💙",
-				imageSrc: "https://placedog.net/700/300",
-				tags: ['DaleBoca', 'Bombonera', 'Limpieza', 'Mantenimiento', 'VamosBoca', 'La12'],
-				user: JSON.parse(localStorage.getItem("user")),
-				numberOfComments: 15
-			}, {
-				id: Math.floor(Math.random() * 100),
-				description: "This is a caption",
-				imageSrc: "https://placedog.net/700/700",
-				user: JSON.parse(localStorage.getItem("user")),
-				numberOfComments: 3
-			})
-
-			vm.page++
-			vm.loading = false
+					if (data.length === 0) {
+						vm.hasMorePosts = false
+					} else {
+						vm.page++
+					}
+				})
+				.catch(err => console.log(err))
+				.finally(() => {
+					vm.loading = false
+				})
 		},
 
 		handleScroll() {
@@ -84,11 +67,8 @@ var vueApp = new Vue({
 			const endOfList = vm.$refs.loadMore.offsetTop
 			const scrollTop = window.scrollY + window.innerHeight
 
-			if (!vm.loading && scrollTop > endOfList) {
-				vm.page++
+			if (!vm.loading && scrollTop > endOfList)
 				vm.getPosts()
-				vm.loading = true
-			}
 
 		},
 	},

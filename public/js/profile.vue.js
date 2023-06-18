@@ -17,8 +17,6 @@ var vueApp = new Vue({
 
 	methods: {
 
-		timeout(ms) { return new Promise(resolve => setTimeout(resolve, ms)) },
-
 		async getPosts() {
 			const vm = this
 			vm.loading = true
@@ -29,10 +27,7 @@ var vueApp = new Vue({
 					vm.posts.push(...data)
 					vm.loading = false
 				})
-				.catch(err => {
-					console.log(err)
-					return null
-				})
+				.catch(err => console.log(err))
 		},
 
 	},

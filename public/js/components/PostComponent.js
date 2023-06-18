@@ -10,7 +10,7 @@ export const PostComponent = {
 			<div class="post-header">
 
 				<div class="post-left">
-					<a class="post-header__profile" href="${baseUrl}/profile/${user.usuario}">
+					<a class="post-header__profile" :href="'${baseUrl}/profile/' + user.usuario">
 						<img class="post-header__avatar" :src="user.avatar || '/img/user.svg'" alt="">
 						<span>{{ user.nombre }}</span>
 					</a>

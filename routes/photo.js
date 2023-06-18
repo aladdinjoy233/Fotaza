@@ -12,6 +12,7 @@ router.post('/post', authController.isAuthenticated, upload.single('photo'), pho
 router.get('/edit/:photoId', authController.isAuthenticated, photoController.edit)
 router.post('/edit', authController.isAuthenticated, photoController.editPost)
 
+router.get('/posts', authController.checkUserState, photoController.getPosts)
 router.get('/posts/:userId', authController.checkUserState, photoController.getUserPosts)
 
 // router.get('/', (req, res) => res.redirect('/auth'))

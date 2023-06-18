@@ -8,6 +8,7 @@ const PhotoRating = require('../database/models/PhotoRating')
 
 const sharp = require('sharp')
 const { uploadPhoto } = require('../firebase/firebase')
+const { Op } = require('sequelize')
 
 exports.createView = async (req, res, next) => {
 	const categories = await Category.findAll({
@@ -181,6 +182,52 @@ async function addWatermark(file, watermark) {
 // Get posts functions
 // ===================
 
+exports.getPosts = async (req, res, next) => {
+	const { page, limit } = req.query
+
+	// Para la paginacion, verificar para que no traiga todo
+	if (!page || !limit) return res.status(400)
+
+	const offset = (page - 1) * limit
+	const parsedLimit = parseInt(limit, 10)
+
+	const where = {}
+	if (req.loggedIn && req.user) {
+		where.user_id = {[Op.not]: req.user.id}
+	}
+
+	// Si el usuario no esta logeado, solo devolver los posts publicos
+	if (!req.loggedIn) {
+		where.is_private = false
+	}
+
+	try {
+		const photos = await Photo.findAll({
+			offset,
+			limit: parsedLimit,
+			where,
+			order: [['created_at', 'DESC']],
+			attributes: ['id', 'user_id', 'title', 'file_path', 'is_private', 'created_at'],
+			include: [
+				{
+					model: User,
+					attributes: ['id', 'usuario', 'avatar', 'nombre']
+				},
+				{
+					model: Tag,
+					attributes: ['tag_name']
+				}
+			]
+		})
+
+		return res.status(200).json(photos)
+	} catch (err) {
+		console.log(err)
+		return res.status(400).json({ error: true, errorMsg: 'Hubo un error' })
+	}
+
+}
+
 exports.getUserPosts = async (req, res, next) => {
 	const { userId } = req.params
 	const where = { user_id: userId }
@@ -190,7 +237,7 @@ exports.getUserPosts = async (req, res, next) => {
 		where.is_private = false
 	}
 
-	const posts = await Photo.findAll({
+	const photos = await Photo.findAll({
 		where,
 		order: [['created_at', 'DESC']],
 		attributes: ['id', 'user_id', 'title', 'file_path', 'is_private', 'created_at'],
@@ -206,5 +253,5 @@ exports.getUserPosts = async (req, res, next) => {
 		]
 	})
 
-	return res.status(200).json(posts)
+	return res.status(200).json(photos)
 }
