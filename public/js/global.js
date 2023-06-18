@@ -17,19 +17,19 @@ function getUser() {
 	// Si no existe en el cache, busca los datos
 	if (!userId) return null;
 	return fetch(`/user/get/${userId}`)
-	.then(res => res.json())
-	.then(data => {
-		try {
-			localStorage.setItem('user', JSON.stringify(data));
-		} catch (err) {
-			console.log('Error con el localStorage: ', err);
-		}
-		return data
-	})
-	.catch(err => {
-		console.log(err)
-		return null
-	});
+		.then(res => res.json())
+		.then(data => {
+			try {
+				localStorage.setItem('user', JSON.stringify(data));
+			} catch (err) {
+				console.log('Error con el localStorage: ', err);
+			}
+			return data
+		})
+		.catch(err => {
+			console.log(err)
+			return null
+		});
 }
 
 // Agregar error a un input

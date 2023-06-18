@@ -32,7 +32,21 @@
 		</div>
 
 		<div class="content-divider"></div>
+
+		<div class="post-container">
+			<post-component v-for="post in posts" :key="post.id" :post="post"></post-component>
+
+			<div class="loading-container" ref="loadMore">
+				<Transition name="showLoad">
+					<load-component v-if="loading"></load-component>
+				</Transition>
+			</div>
+		</div>
 	</div>
+
+	<script>
+		const user = JSON.parse(`<%- JSON.stringify(user) %>`)
+	</script>
 	
 </body>
 </html>

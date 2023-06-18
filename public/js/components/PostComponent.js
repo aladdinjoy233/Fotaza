@@ -8,14 +8,27 @@ export const PostComponent = {
 	template: `
 		<div class="post">
 			<div class="post-header">
-				<a class="post-header__profile">
-					<img class="post-header__avatar" :src="user.avatar || '/img/user.svg'" alt="">
-					<span>{{ user.nombre }}</span>
-				</a>
+
+				<div class="post-left">
+					<a class="post-header__profile" href="${baseUrl}/profile/${user.usuario}">
+						<img class="post-header__avatar" :src="user.avatar || '/img/user.svg'" alt="">
+						<span>{{ user.nombre }}</span>
+					</a>
+					<span class="post-header__date">
+						<span class="post-header__separator">•</span>{{ relativeTime }}
+					</span>
+				</div>
+
+				<div class="post-right" v-if="userId == post.user_id">
+					<a :href="'${baseUrl}/photo/edit/' + post.id" class="btn btn-link">
+						<i class="fa-solid fa-pencil"></i>
+					</a>
+				</div>
+
 			</div>
 
 			<a href="#" class="post-image">
-				<img :src="post.imageSrc" alt="Post Image">
+				<img :src="post.file_path" alt="Post Image">
 			</a>
 
 			<div class="post-actions">
@@ -37,9 +50,9 @@ export const PostComponent = {
 			</div>
 
 			<div class="post-details">
-				<p>{{ post.description }}</p>
+				<p>{{ post.title }}</p>
 				<div class="post-details__tags">
-					<span class="tag" v-for="tag in post.tags">#{{ tag }}</span>
+					<span class="tag" v-for="tag in post.tags">#{{ tag.tag_name }}</span>
 				</div>
 			</div>
 
@@ -51,14 +64,23 @@ export const PostComponent = {
 	data() {
 		return {
 			user: this.post.user,
+			userId,
 			radioId: `rating-${this.post.id}`,
-			localRating: this.post.rating
+			localRating: this.post.rating,
+			relativeTime: ''
 		}
 	},
 	methods: {
+		getRelativeTime() {
+			const createdDate = moment(this.post.created_at)
+			const formattedRelativeTime = createdDate.fromNow()
+			this.relativeTime = formattedRelativeTime
+		}
 	},
 	computed: {
 	},
 	mounted() {
+		moment.locale('es')
+		this.getRelativeTime()
 	}
 };

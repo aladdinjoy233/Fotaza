@@ -12,12 +12,24 @@
 		position: relative;
 
 		.post-header {
+			display: inline-flex;
+			align-items: center;
+			justify-content: space-between;
+			margin-bottom: .75rem;
+
+			.post-left {
+				display: inline-flex;
+				align-items: center;
+			}
+
+			.post-right .btn-link::after { content: none; }
 			
 			&__profile {
 				display: flex;
 				align-items: center;
 				cursor: pointer;
-				margin-bottom: .75rem;
+				color: var(--clr-white);
+				text-decoration: none;
 			}
 
 			&__avatar {
@@ -36,6 +48,14 @@
 					max-width: 100%;
 					height: auto;
 				}
+			}
+
+			&__date {
+				color: var(--clr-grey-light);
+			}
+
+			&__separator {
+				margin: 0 .25rem;
 			}
 		}
 

@@ -128,11 +128,11 @@ exports.isAuthenticated = async (req, res, next) => {
 
 	const decodificada = await promisify(jwt.verify)(req.cookies.jwt, jwtConfig.secret)
 
-	const user = User.findByPk(decodificada.id)
+	const user = await User.findByPk(decodificada.id)
 
 	if (user == null) return next()
 
-	req.user = await user
+	req.user = user
 	return next()
 }
 
@@ -150,6 +150,23 @@ exports.isLoggedIn = async (req, res, next) => {
 	} else {
 		return next()
 	}
+}
+
+exports.checkUserState = async (req, res, next) => {
+	if (!req.cookies.jwt) {
+		req.loggedIn = false
+		return next()
+	}
+
+	const decodificada = await promisify(jwt.verify)(req.cookies.jwt, jwtConfig.secret)
+
+	const user = await User.findByPk(decodificada.id)
+
+	if (user == null) return next()
+	
+	req.loggedIn = true
+	req.user = user
+	return next()
 }
 
 exports.getUserId = async (req, res, next) => {

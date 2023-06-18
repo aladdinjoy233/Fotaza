@@ -1,4 +1,5 @@
 const Photo = require('../database/models/Photo')
+const User = require('../database/models/User')
 const Category = require('../database/models/Category')
 const Right = require('../database/models/Right')
 const Tag = require('../database/models/Tag')
@@ -174,4 +175,36 @@ async function addWatermark(file, watermark) {
 		.toBuffer()
 
 	return watermarkedBuffer
+}
+
+// ===================
+// Get posts functions
+// ===================
+
+exports.getUserPosts = async (req, res, next) => {
+	const { userId } = req.params
+	const where = { user_id: userId }
+
+	// Si el usuario no esta logeado, solo devolver los posts publicos
+	if (!req.loggedIn) {
+		where.is_private = false
+	}
+
+	const posts = await Photo.findAll({
+		where,
+		order: [['created_at', 'DESC']],
+		attributes: ['id', 'user_id', 'title', 'file_path', 'is_private', 'created_at'],
+		include: [
+			{
+				model: User,
+				attributes: ['id', 'usuario', 'avatar', 'nombre']
+			},
+			{
+				model: Tag,
+				attributes: ['tag_name']
+			}
+		]
+	})
+
+	return res.status(200).json(posts)
 }

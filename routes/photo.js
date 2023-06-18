@@ -12,6 +12,8 @@ router.post('/post', authController.isAuthenticated, upload.single('photo'), pho
 router.get('/edit/:photoId', authController.isAuthenticated, photoController.edit)
 router.post('/edit', authController.isAuthenticated, photoController.editPost)
 
+router.get('/posts/:userId', authController.checkUserState, photoController.getUserPosts)
+
 // router.get('/', (req, res) => res.redirect('/auth'))
 // router.get('/edit', authController.isAuthenticated, userController.editProfile)
 // router.get('/:slug', userController.userProfile)
