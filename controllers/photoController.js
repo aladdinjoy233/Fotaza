@@ -216,11 +216,16 @@ exports.getPosts = async (req, res, next) => {
 				{
 					model: Tag,
 					attributes: ['tag_name']
+				},
+				{
+					model: PhotoRating,
+					attributes: ['rating_value', 'user_id']
 				}
 			]
 		})
-
-		return res.status(200).json(photos)
+		
+		const finalPhotos = filterPhotosArray(photos, req)
+		return res.status(200).json(finalPhotos)
 	} catch (err) {
 		console.log(err)
 		return res.status(400).json({ error: true, errorMsg: 'Hubo un error' })
@@ -249,9 +254,67 @@ exports.getUserPosts = async (req, res, next) => {
 			{
 				model: Tag,
 				attributes: ['tag_name']
+			},
+			{
+				model: PhotoRating,
+				attributes: ['rating_value', 'user_id']
 			}
 		]
 	})
 
-	return res.status(200).json(photos)
+	const finalPhotos = filterPhotosArray(photos, req)
+	return res.status(200).json(finalPhotos)
+}
+
+// ====================
+// Ratings functions
+// ====================
+exports.setRating = async (req, res, next) => {
+	const { photoId } = req.params
+	let { rating } = req.body
+	const user = req.user
+
+	if (!photoId || !rating || !user) return res.status(400).json({ error: true, errorMsg: 'Error al guardar la calificación' })
+
+	rating = parseInt(rating)
+	if (isNaN(rating)) return res.status(400).json({ error: true, errorMsg: 'La calificación debe ser un número' })
+
+	if (rating > 5) rating = 5
+	if (rating < 1) rating = 1
+
+	let savedRating = await PhotoRating.findOne({ where: { photo_id: photoId, user_id: user.id } })
+
+	if (savedRating) {
+		savedRating.rating_value = rating
+		await savedRating.save()
+	} else {
+		savedRating = await PhotoRating.create({ photo_id: photoId, user_id: user.id, rating_value: rating })
+	}
+
+	const photo = await Photo.findByPk(photoId, { include: PhotoRating })
+	return res.status(200).json({ rating: savedRating.rating_value, average: getRatingAverage(photo) })
+}
+
+function filterPhotosArray(photos, req) {
+	return photos.map(photo => {
+		let rating_average = getRatingAverage(photo)
+		
+		let user_rating = null
+		if (req.loggedIn && req.user) {
+			const rating = photo.photo_ratings.find(rating => rating.user_id == req.user.id)
+			user_rating = rating ? rating.rating_value : null
+		}
+
+		return {
+			...photo.toJSON(),
+			rating_average,
+			user_rating
+		}
+	})
+}
+
+function getRatingAverage(photo) { // Photo object
+	let rating_average = photo.photo_ratings.map(rating => rating.rating_value).reduce((a, b) => a + b, 0) / photo.photo_ratings.length
+	rating_average = isNaN(rating_average) ? null : Number(rating_average.toFixed(1))
+	return rating_average
 }

@@ -24,5 +24,9 @@ Tag.belongsToMany(Photo, { through: 'photo_tags', foreignKey: 'tag_id' })
 User.belongsToMany(Tag, { through: UserTag, foreignKey: 'user_id' })
 Tag.belongsToMany(User, { through: UserTag, foreignKey: 'tag_id' })
 
-Photo.belongsToMany(User, { through: PhotoRating, foreignKey: 'photo_id' });
-User.belongsToMany(Photo, { through: PhotoRating, foreignKey: 'user_id' });
+// Photo ratings
+User.belongsToMany(Photo, { through: PhotoRating, foreignKey: 'user_id' })
+Photo.belongsToMany(User, { through: PhotoRating, foreignKey: 'photo_id' })
+
+User.hasMany(PhotoRating, { foreignKey: 'user_id' })
+Photo.hasMany(PhotoRating, { foreignKey: 'photo_id' })

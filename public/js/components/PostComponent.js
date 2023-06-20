@@ -31,22 +31,22 @@ export const PostComponent = {
 				<img :src="post.file_path" alt="Post Image">
 			</a>
 
-			<div class="post-actions">
+			<div class="post-actions" v-if="userId">
 				<form class="post-actions__rating">
 					<p>
-						<input type="radio" :id="radioId + '-1'" name="rating" value="5" v-model="localRating">
+						<input type="radio" :id="radioId + '-1'" name="rating" value="5" v-model="rating">
 						<label :for="radioId + '-1'">★</label>
-						<input type="radio" :id="radioId + '-2'" name="rating" value="4" v-model="localRating">
+						<input type="radio" :id="radioId + '-2'" name="rating" value="4" v-model="rating">
 						<label :for="radioId + '-2'">★</label>
-						<input type="radio" :id="radioId + '-3'" name="rating" value="3" v-model="localRating">
+						<input type="radio" :id="radioId + '-3'" name="rating" value="3" v-model="rating">
 						<label :for="radioId + '-3'">★</label>
-						<input type="radio" :id="radioId + '-4'" name="rating" value="2" v-model="localRating">
+						<input type="radio" :id="radioId + '-4'" name="rating" value="2" v-model="rating">
 						<label :for="radioId + '-4'">★</label>
-						<input type="radio" :id="radioId + '-5'" name="rating" value="1" v-model="localRating">
+						<input type="radio" :id="radioId + '-5'" name="rating" value="1" v-model="rating">
 						<label :for="radioId + '-5'">★</label>
 					</p>
 				</form>
-				<div>{{ localRating }}</div>
+				<div class="post-actions__rating-average">{{ post.rating_average ? post.rating_average + ' (promedio)' : '' }}</div>
 			</div>
 
 			<div class="post-details">
@@ -66,8 +66,10 @@ export const PostComponent = {
 			user: this.post.user,
 			userId,
 			radioId: `rating-${this.post.id}`,
-			localRating: this.post.rating,
-			relativeTime: ''
+			rating: this.post.user_rating || null,
+			relativeTime: '',
+
+			awaitingResponse: false
 		}
 	},
 	methods: {
@@ -78,6 +80,37 @@ export const PostComponent = {
 		}
 	},
 	computed: {
+	},
+	watch: {
+		rating(newRating, oldRating) {
+			const vm = this
+
+			if (vm.awaitingResponse) return
+			vm.awaitingResponse = true
+
+			fetch(`/photo/${vm.post.id}/rating`, {
+				method: 'POST',
+				body: JSON.stringify({ rating: newRating }),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+				.then(res => res.json())
+				.then(data => {
+					if (data.error) {
+						vm.rating = oldRating
+						return
+					}
+					
+					vm.rating = data.rating
+					vm.post.rating_average = data.average
+				})
+				.catch(err => {
+					console.log(err)
+					vm.rating = oldRating
+				})
+				.finally(() => vm.awaitingResponse = false)
+		}
 	},
 	mounted() {
 		moment.locale('es')

@@ -15,6 +15,8 @@ router.post('/edit', authController.isAuthenticated, photoController.editPost)
 router.get('/posts', authController.checkUserState, photoController.getPosts)
 router.get('/posts/:userId', authController.checkUserState, photoController.getUserPosts)
 
+router.post('/:photoId/rating', authController.isAuthenticated, photoController.setRating)
+
 // router.get('/', (req, res) => res.redirect('/auth'))
 // router.get('/edit', authController.isAuthenticated, userController.editProfile)
 // router.get('/:slug', userController.userProfile)

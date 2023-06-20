@@ -805,6 +805,10 @@ img {
   color: var(--clr-primary);
 }
 
+.post-container .post .post-actions__rating-average {
+  color: var(--clr-grey-light);
+}
+
 .post-container .post .post-details__tags {
   display: -webkit-box;
   display: -ms-flexbox;
