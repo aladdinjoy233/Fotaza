@@ -66,9 +66,32 @@
 						</label>
 					</div>
 
-					<button type="submit" class="btn btn-primary">Modificar</button>
+					<div class="btn-group">
+						<button type="submit" class="btn btn-primary">Modificar</button>
+						<button type="button" class="btn btn-link delete-btn" @click="showModal = true"><i class="fa-solid fa-trash"></i> Eliminar</button>
+					</div>
 
 				</form>
+			</div>
+
+			<div id="deletePhotoModal" class="modal" :class="{ 'show': showModal }" ref="deleteModal">
+				<div class="modal-content">
+					<span class="close" @click="showModal = false"><i class="fa-solid fa-xmark"></i></span>
+
+					<div class="modal-header">
+						<h2>Confirmación</h2>
+					</div>
+					<div class="modal-body">
+						<p>Esta seguro que desea eliminar esta publicación? No se podrá recuperar una vez eliminada.</p>
+					</div>
+					<div class="modal-footer">
+						<div class="btn-group">
+							<button type="button" class="btn btn-link" @click="showModal = false">Cerrar</button>
+							<button type="button" class="btn btn-link delete-btn" @click="deletePhoto"><i class="fa-solid fa-trash"></i> Eliminar</button>
+						</div>
+					</div>
+
+				</div>
 			</div>
 
 		</div>

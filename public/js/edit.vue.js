@@ -26,6 +26,8 @@ var vueApp = new Vue({
 		maxTagsCount: 3,
 
 		disablePrivate: false,
+
+		showModal: false
 	},
 
 	methods: {
@@ -117,6 +119,30 @@ var vueApp = new Vue({
 				})
 				.catch(err => console.log(err))
 		},
+
+		deletePhoto() {
+			const vm = this
+			if (!vm.photo.id) return
+
+			fetch('/photo/delete', {
+				method: 'POST',
+				body: JSON.stringify({ photo_id: vm.photo.id }),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+				.then(res => res.redirected ? window.location.href = res.url : res.json())
+				.then(data => {
+					if (data.error) {
+						showAlert('Error', data.errorMsg, 'error')
+						return
+					}
+
+					window.location.href = '/'
+				})
+				.catch(err => console.log(err))
+				.finally(() => vm.showModal = false)
+		},
 		
 	},
 
@@ -144,5 +170,9 @@ var vueApp = new Vue({
 				vm.addTag()
 			}
 		})
+
+		window.onclick = e => {
+			if (e.target == vm.$refs.deleteModal) vm.showModal = false
+		}
 	}
 })

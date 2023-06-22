@@ -7,7 +7,7 @@ const PhotoComment = require('../database/models/PhotoComment')
 const PhotoRating = require('../database/models/PhotoRating')
 
 const sharp = require('sharp')
-const { uploadPhoto } = require('../firebase/firebase')
+const { uploadPhoto, deletePhoto } = require('../firebase/firebase')
 const { Op } = require('sequelize')
 
 exports.createView = async (req, res, next) => {
@@ -176,6 +176,24 @@ async function addWatermark(file, watermark) {
 		.toBuffer()
 
 	return watermarkedBuffer
+}
+
+exports.deletePost = async (req, res, next) => {
+	const { photo_id } = req.body
+	if (!photo_id) return res.status(400).json({ error: true, errorMsg: 'Faltan datos' })
+	
+	const photo = await Photo.findByPk(photo_id)
+	if (!photo) return res.status(400).json({ error: true, errorMsg: 'Error con la foto' })
+	
+	if (!req.user || photo.user_id != req.user.id) return res.status(400).json({ error: true, errorMsg: 'No tiene permiso' })
+
+	// Borrar la imagen del storage en Firebase
+	const isDeleted = await deletePhoto(photo.file_path)
+	if (!isDeleted) return res.status(400).json({ error: true, errorMsg: 'Error con el borrado de la foto' })
+
+	await photo.destroy()
+
+	return res.redirect('/')
 }
 
 // ===================

@@ -43,7 +43,7 @@ exports.updateAvatar = async (userId, file, downloadUrl) => {
 }
 
 exports.deleteAvatar = async (downloadUrl) => {
-	// Parse the download URL too get the storage reference path
+	// Parse the download URL to get the storage reference path
 	const storageRef = ref(storage, getFileFromURL(downloadUrl));
 
 	// Delete the object
@@ -54,14 +54,6 @@ exports.deleteAvatar = async (downloadUrl) => {
 		console.log(error);
 		return false;
 	}
-}
-
-function getFileFromURL(fileURL) {
-	const fSlashes = fileURL.split('/');
-  const fQuery = fSlashes[fSlashes.length - 1].split('?');
-  const segments = fQuery[0].split('%2F');
-  const fileName = segments.join('/');
-  return fileName;
 }
 
 // Funciones para subir fotos
@@ -83,4 +75,26 @@ exports.uploadPhoto = async (userId, file, buffer) => {
 		console.log(error);
 		return null;
 	}
+}
+
+exports.deletePhoto = async (downloadUrl) => {
+	// Parse the download URL to get the storage reference path
+	const storageRef = ref(storage, getFileFromURL(downloadUrl));
+
+	// Delete the object
+	try {
+		await deleteObject(storageRef);
+		return true;
+	} catch (error) {
+		console.log(error);
+		return false;
+	}
+}
+
+function getFileFromURL(fileURL) {
+	const fSlashes = fileURL.split('/');
+  const fQuery = fSlashes[fSlashes.length - 1].split('?');
+  const segments = fQuery[0].split('%2F');
+  const fileName = segments.join('/');
+  return fileName;
 }

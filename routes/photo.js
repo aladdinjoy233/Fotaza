@@ -11,6 +11,7 @@ router.get('/', authController.isAuthenticated, photoController.createView)
 router.post('/post', authController.isAuthenticated, upload.single('photo'), photoController.post)
 router.get('/edit/:photoId', authController.isAuthenticated, photoController.edit)
 router.post('/edit', authController.isAuthenticated, photoController.editPost)
+router.post('/delete', authController.isAuthenticated, photoController.deletePost)
 
 router.get('/posts', authController.checkUserState, photoController.getPosts)
 router.get('/posts/:userId', authController.checkUserState, photoController.getUserPosts)

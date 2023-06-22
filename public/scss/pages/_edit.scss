@@ -21,9 +21,23 @@
 				align-items: center;
 			}
 
-			.btn-primary {
-				width: fit-content;
+			
+			.btn-group {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+
+				.btn-primary {
+					width: fit-content;
+				}
+
+				.delete-btn {
+					color: var(--clr-error);
+
+					&::after { background-color: var(--clr-error); }
+				}
 			}
+
 
 			.tags-container {
 				display: flex;
