@@ -1875,6 +1875,86 @@ img {
       -ms-flex: 1;
           flex: 1;
   margin-top: 0.25rem;
+  overflow-y: auto;
+}
+
+.photo-page .container .data-body::-webkit-scrollbar {
+  width: 0.375rem;
+}
+
+.photo-page .container .data-body::-webkit-scrollbar-track {
+  background-color: var(--clr-grey-dark);
+}
+
+.photo-page .container .data-body::-webkit-scrollbar-thumb {
+  background-color: #383838;
+}
+
+.photo-page .container .data-body::-webkit-scrollbar-thumb:hover {
+  background-color: var(--clr-grey);
+}
+
+.photo-page .container .data-body .interested .collapsable-div {
+  background-color: var(--dark-bg);
+  border-radius: var(--border-radius);
+  padding: .625rem;
+  margin-top: .5rem;
+  margin-bottom: 1rem;
+}
+
+.photo-page .container .data-body .interested .collapsable-div .collapsable-title {
+  cursor: pointer;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.photo-page .container .data-body .interested .collapsable-div .collapsable-title i {
+  -webkit-transform: rotate(0deg);
+          transform: rotate(0deg);
+  -webkit-transition: -webkit-transform 200ms ease;
+  transition: -webkit-transform 200ms ease;
+  transition: transform 200ms ease;
+  transition: transform 200ms ease, -webkit-transform 200ms ease;
+}
+
+.photo-page .container .data-body .interested .collapsable-div.open .collapsable-title i {
+  -webkit-transform: rotate(180deg);
+          transform: rotate(180deg);
+}
+
+.photo-page .container .data-body .interested .collapsable-div .collapsable-content {
+  max-height: 0px;
+  overflow: hidden;
+  -webkit-transition: max-height 500ms ease;
+  transition: max-height 500ms ease;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 1rem;
+}
+
+.photo-page .container .data-body .interested .collapsable-div .collapsable-content p {
+  margin-top: 1rem;
+}
+
+.photo-page .container .data-body .interested .collapsable-div.open .collapsable-content {
+  max-height: 500px;
+}
+
+.photo-page .container .data-body .comments__empty,
+.photo-page .container .data-body .interested__empty {
+  color: var(--clr-grey-light);
 }
 
 .photo-page .container .actions__rating {

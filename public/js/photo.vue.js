@@ -15,6 +15,11 @@ var vueApp = new Vue({
 		relativeTime: '',
 
 		baseUrl,
+
+		showCollapseInterested: false,
+
+		interesados: [],
+		comentarios: [],
 	},
 
 	methods: {
