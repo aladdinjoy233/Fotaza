@@ -13,6 +13,7 @@ router.get('/edit/:photoId', authController.isAuthenticated, photoController.edi
 router.post('/edit', authController.isAuthenticated, photoController.editPost)
 router.post('/delete', authController.isAuthenticated, photoController.deletePost)
 
+router.get('/:photoId', authController.checkUserState, photoController.viewPost)
 router.get('/posts', authController.checkUserState, photoController.getPosts)
 router.get('/posts/:userId', authController.checkUserState, photoController.getUserPosts)
 

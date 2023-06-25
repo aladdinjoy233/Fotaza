@@ -27,7 +27,7 @@ export const PostComponent = {
 
 			</div>
 
-			<a href="#" class="post-image">
+			<a :href="'${baseUrl}/photo/' + post.id" class="post-image">
 				<img :src="post.file_path" alt="Post Image">
 			</a>
 
@@ -57,7 +57,7 @@ export const PostComponent = {
 			</div>
 
 			<div class="post-footer">
-				<a href="#" class="post-footer__comments">Ver comentarios</a>
+				<a :href="'${baseUrl}/photo/' + post.id" class="post-footer__comments">Ver comentarios</a>
 			</div>
 		</div>
 	`,

@@ -284,6 +284,33 @@ exports.getUserPosts = async (req, res, next) => {
 	return res.status(200).json(finalPhotos)
 }
 
+exports.viewPost = async (req, res, next) => {
+	const { photoId } = req.params
+	if (!photoId) return res.status(400).redirect('/')
+
+	const photo = await Photo.findByPk(photoId, {
+		include: [
+			{
+				model: User,
+				attributes: ['id', 'usuario', 'avatar', 'nombre']
+			},
+			{
+				model: Tag,
+				attributes: ['tag_name']
+			},
+			{
+				model: PhotoRating,
+				attributes: ['rating_value', 'user_id']
+			}
+		]
+	})
+	if (!photo) return res.status(400).redirect('/')
+
+	const finalPhoto = filterPhoto(photo, req)
+
+	res.render('photo', { title: 'Foto | Fotaza', scripts: ['photo'], photo: finalPhoto })
+}
+
 // ====================
 // Ratings functions
 // ====================
@@ -329,6 +356,22 @@ function filterPhotosArray(photos, req) {
 			user_rating
 		}
 	})
+}
+
+function filterPhoto(photo, req) {
+	let rating_average = getRatingAverage(photo)
+
+	let user_rating = null
+	if (req.loggedIn && req.user) {
+		const rating = photo.photo_ratings.find(rating => rating.user_id == req.user.id)
+		user_rating = rating ? rating.rating_value : null
+	}
+
+	return {
+		...photo.toJSON(),
+		rating_average,
+		user_rating
+	}
 }
 
 function getRatingAverage(photo) { // Photo object
