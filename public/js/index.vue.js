@@ -42,10 +42,14 @@ var vueApp = new Vue({
 		async getPosts() {
 			const vm = this
 			if (!vm.hasMorePosts) return
-
 			vm.loading = true
 
-			fetch(`/photo/posts?page=${vm.page}&limit=${vm.limit}`)
+			fetch(`/photo/posts?page=${vm.page}&limit=${vm.limit}`, {
+				method: 'GET',
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
 				.then(res => res.json())
 				.then(data => {
 					vm.posts.push(...data)

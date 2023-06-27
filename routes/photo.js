@@ -1,5 +1,5 @@
 const express = require('express')
-const router = express.Router()
+const router = express.Router({ mergeParams: true })
 
 const multer = require('multer')
 const upload = multer({ storage: multer.memoryStorage() })
@@ -13,11 +13,12 @@ router.get('/edit/:photoId', authController.isAuthenticated, photoController.edi
 router.post('/edit', authController.isAuthenticated, photoController.editPost)
 router.post('/delete', authController.isAuthenticated, photoController.deletePost)
 
-router.get('/:photoId', authController.checkUserState, photoController.viewPost)
 router.get('/posts', authController.checkUserState, photoController.getPosts)
 router.get('/posts/:userId', authController.checkUserState, photoController.getUserPosts)
+router.get('/:photoId', authController.checkUserState, photoController.viewPost)
 
 router.post('/:photoId/rating', authController.isAuthenticated, photoController.setRating)
+router.post('/:photoId/comment', authController.isAuthenticated, photoController.setComment)
 
 // router.get('/', (req, res) => res.redirect('/auth'))
 // router.get('/edit', authController.isAuthenticated, userController.editProfile)

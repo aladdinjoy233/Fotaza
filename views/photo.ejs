@@ -41,14 +41,14 @@
 
 					<div class="data-body">
 
-						<div class="interested">
+						<div class="interested" v-if="userId == photo.user_id">
 							<div class="collapsable-div" :class="{ open: showCollapseInterested }">
 								<div class="collapsable-title" @click="showCollapseInterested = !showCollapseInterested">
 									<span>Ver interesados</span>
 									<i class="fa-solid fa-chevron-down"></i>
 								</div>
 								<div class="collapsable-content">
-									<div v-if="interesados.length > 0">
+									<div v-if="interested.length > 0">
 
 									</div>
 									<div v-else class="interested__empty">
@@ -59,8 +59,8 @@
 						</div>
 	
 						<div class="comments">
-							<div v-if="comentarios.length > 0">
-
+							<div v-if="comments.length > 0">
+								<comment-component v-for="comment in comments" :comment="comment" :key="comment.id"></comment-component>
 							</div>
 							<div v-else class="comments__empty">
 								<p>No hay comentarios...</p>
@@ -70,7 +70,7 @@
 					</div>
 
 
-					<div class="actions">
+					<div class="actions" v-if="userId !== null">
 
 						<div class="actions__rating">
 							<form class="actions__rating-stars">
@@ -91,10 +91,10 @@
 						</div>
 
 						<div class="actions__comment">
-							<form>
+							<form @submit.prevent="sendComment">
 								<div class="input-group">
 									<div class="input-solid-btn-group">
-										<input type="text" placeholder="Comentar...">
+										<input type="text" placeholder="Comentar..." v-model="comentario">
 										<button class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i></button>
 									</div>
 								</div>

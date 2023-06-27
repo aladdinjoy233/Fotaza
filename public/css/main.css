@@ -1899,7 +1899,6 @@ img {
   border-radius: var(--border-radius);
   padding: .625rem;
   margin-top: .5rem;
-  margin-bottom: 1rem;
 }
 
 .photo-page .container .data-body .interested .collapsable-div .collapsable-title {
@@ -1954,6 +1953,53 @@ img {
 
 .photo-page .container .data-body .comments__empty,
 .photo-page .container .data-body .interested__empty {
+  color: var(--clr-grey-light);
+}
+
+.photo-page .container .data-body .comments {
+  margin-top: 1rem;
+}
+
+.photo-page .container .data-body .comments .comment {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: .5rem;
+}
+
+.photo-page .container .data-body .comments .comment .comment__header-profile {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  overflow: hidden;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.photo-page .container .data-body .comments .comment .comment__body p {
+  font-size: 0.875rem;
+}
+
+.photo-page .container .data-body .comments .comment .comment__body-profile {
+  color: var(--clr-primary);
+  margin-right: 0.25rem;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.photo-page .container .data-body .comments .comment .comment__body-profile::after {
+  bottom: 0.125rem;
+}
+
+.photo-page .container .data-body .comments .comment .comment__body-date {
+  margin-bottom: 1rem;
   color: var(--clr-grey-light);
 }
 

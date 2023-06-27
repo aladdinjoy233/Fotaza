@@ -287,8 +287,9 @@ exports.getUserPosts = async (req, res, next) => {
 exports.viewPost = async (req, res, next) => {
 	const { photoId } = req.params
 	if (!photoId) return res.status(400).redirect('/')
+	if (isNaN(photoId)) return res.status(400).redirect('/')
 
-	const photo = await Photo.findByPk(photoId, {
+	let photo = await Photo.findByPk(photoId, {
 		include: [
 			{
 				model: User,
@@ -301,14 +302,24 @@ exports.viewPost = async (req, res, next) => {
 			{
 				model: PhotoRating,
 				attributes: ['rating_value', 'user_id']
+			},
+			{
+				model: PhotoComment,
+				attributes: ['id', 'comment', 'created_at'],
+				include: [
+					{
+						model: User,
+						attributes: ['usuario', 'avatar', 'nombre']
+					}
+				]
 			}
 		]
 	})
 	if (!photo) return res.status(400).redirect('/')
+	if (photo.is_private && !req.loggedIn) return res.status(400).redirect('/auth')
 
-	const finalPhoto = filterPhoto(photo, req)
-
-	res.render('photo', { title: 'Foto | Fotaza', scripts: ['photo'], photo: finalPhoto })
+	photo = filterPhoto(photo, req)
+	res.render('photo', { title: 'Foto | Fotaza', scripts: ['photo'], photo })
 }
 
 // ====================
@@ -367,6 +378,10 @@ function filterPhoto(photo, req) {
 		user_rating = rating ? rating.rating_value : null
 	}
 
+	// Cambiar orden de los comentarios
+	const reverseComments = photo.photo_comments.reverse()
+	photo.photo_comments = reverseComments
+
 	return {
 		...photo.toJSON(),
 		rating_average,
@@ -378,4 +393,30 @@ function getRatingAverage(photo) { // Photo object
 	let rating_average = photo.photo_ratings.map(rating => rating.rating_value).reduce((a, b) => a + b, 0) / photo.photo_ratings.length
 	rating_average = isNaN(rating_average) ? null : Number(rating_average.toFixed(1))
 	return rating_average
+}
+
+// ====================
+// Comments functions
+// ====================
+exports.setComment = async (req, res, next) => {
+	const { photoId } = req.params
+	let { comment } = req.body
+	const user = req.user
+
+	if (!photoId || !comment || !user) return res.status(400).json({ error: true, errorMsg: 'Error al enviar comentario' })
+
+	let savedComment = await PhotoComment.create({ photo_id: photoId, user_id: user.id, comment: comment.trim() })
+
+	savedComment = await PhotoComment.findOne({
+		where: { id: savedComment.id },
+		attributes: ['id', 'comment', 'created_at'],
+		include: [
+			{
+				model: User,
+				attributes: ['id', 'usuario', 'avatar', 'nombre']
+			}
+		]
+	})
+
+	return res.status(200).json({ savedComment })
 }
