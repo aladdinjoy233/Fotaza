@@ -1,6 +1,8 @@
 import { SideNavComponent } from "./components/SideNavComponent.js"
 import { CommentComponent } from "./components/CommentComponent.js"
 
+const socket = io(socketUrl)
+
 var vueApp = new Vue({
 	el: "#app",
 
@@ -26,6 +28,7 @@ var vueApp = new Vue({
 		comments: photo.photo_comments,
 
 		comentario: '',
+		// socket: io(socketUrl),
 	},
 
 	methods: {
@@ -57,6 +60,7 @@ var vueApp = new Vue({
 					}
 					vm.comentario = ''
 					vm.comments.unshift(data.savedComment)
+					socket.emit('send-comment', data.savedComment, photo.id)
 				})
 				.catch(err => {
 					console.log(err)
@@ -98,8 +102,11 @@ var vueApp = new Vue({
 	},
 
 	mounted() {
-		console.log(photo)
 		moment.locale('es')
 		this.getRelativeTime()
+
+		// Socket listeners
+		socket.emit('view-post', photo.id)
+		socket.on('recieve-comment', comment => this.comments.unshift(comment))
 	}
 })

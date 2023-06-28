@@ -20,6 +20,10 @@
 		.photo__img {
 			border-radius: var(--border-radius);
 			overflow: hidden;
+
+			img {
+				width: 100%;
+			}
 		}
 
 		.photo-data {

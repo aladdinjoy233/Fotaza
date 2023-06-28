@@ -7,7 +7,7 @@
     "dev": "nodemon ./bin/www"
   },
   "dependencies": {
-    "bcrypt": "^5.1.0",
+    "bcrypt": "^5.0.1",
     "body-parser": "^1.20.1",
     "connect-flash": "^0.1.1",
     "cookie-parser": "~1.4.4",
@@ -32,9 +32,11 @@
     "passport-local": "^1.0.0",
     "sequelize": "^6.31.0",
     "sharp": "^0.32.1",
+    "socket.io": "^4.7.0",
+    "socket.io-client": "^4.7.0",
     "watermarkjs": "^2.1.1"
   },
   "devDependencies": {
-    "nodemon": "^2.0.20"
+    "nodemon": "^1.14.9"
   }
 }

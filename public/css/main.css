@@ -1778,6 +1778,10 @@ img {
   overflow: hidden;
 }
 
+.photo-page .container .photo__img img {
+  width: 100%;
+}
+
 .photo-page .container .photo-data {
   background-color: var(--clr-grey-dark);
   padding: 1rem;

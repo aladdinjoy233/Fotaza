@@ -19,9 +19,15 @@ var photoRouter = require('./routes/photo');
 
 var app = express();
 
+// Socket imports
+var http = require('http').createServer(app);
+var socket = require('./socket/socket');
+const socketPort = 3100
+
 // Middleware para obtener baseUrl
 app.use((req, res, next) => {
 	global.baseUrl = req.protocol + '://' + req.get('host');
+	global.socketUrl = req.protocol + '://' + req.get('host').replace('3000', socketPort);
 	next();
 });
 
@@ -66,5 +72,9 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+// Socket server
+socket(http);
+http.listen(socketPort, () => console.log(`Socket server is running on port ${socketPort}`))
 
 module.exports = app;
