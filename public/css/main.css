@@ -869,6 +869,18 @@ img {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.post-container .post .post-actions .d-flex {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   gap: .5rem;
 }
 
@@ -901,6 +913,24 @@ img {
 
 .post-container .post .post-actions__rating-average {
   color: var(--clr-grey-light);
+}
+
+.post-container .post .post-actions__interested .btn.btn-link, .post-container .post .post-actions__interested .btn.btn-link-danger {
+  color: var(--clr-grey-hover);
+  -webkit-transition: 150ms ease;
+  transition: 150ms ease;
+}
+
+.post-container .post .post-actions__interested .btn.btn-link::after, .post-container .post .post-actions__interested .btn.btn-link-danger::after {
+  content: none;
+}
+
+.post-container .post .post-actions__interested .btn.btn-link:hover, .post-container .post .post-actions__interested .btn.btn-link-danger:hover {
+  color: var(--clr-grey-light);
+}
+
+.post-container .post .post-actions__interested .btn.btn-link.interested, .post-container .post .post-actions__interested .btn.interested.btn-link-danger {
+  color: var(--clr-primary);
 }
 
 .post-container .post .post-details__tags {

@@ -221,7 +221,7 @@ exports.getPosts = async (req, res, next) => {
 	}
 
 	try {
-		const photos = await Photo.findAll({
+		let photos = await Photo.findAll({
 			offset,
 			limit: parsedLimit,
 			where,
@@ -239,12 +239,16 @@ exports.getPosts = async (req, res, next) => {
 				{
 					model: PhotoRating,
 					attributes: ['rating_value', 'user_id']
+				},
+				{
+					model: PhotoInterested,
+					attributes: ['id', 'photo_id', 'user_id']
 				}
 			]
 		})
 		
-		const finalPhotos = filterPhotosArray(photos, req)
-		return res.status(200).json(finalPhotos)
+		photos = filterPhotosArray(photos, req)
+		return res.status(200).json(photos)
 	} catch (err) {
 		console.log(err)
 		return res.status(400).json({ error: true, errorMsg: 'Hubo un error' })
@@ -261,7 +265,7 @@ exports.getUserPosts = async (req, res, next) => {
 		where.is_private = false
 	}
 
-	const photos = await Photo.findAll({
+	let photos = await Photo.findAll({
 		where,
 		order: [['created_at', 'DESC']],
 		attributes: ['id', 'user_id', 'title', 'file_path', 'is_private', 'created_at'],
@@ -277,12 +281,16 @@ exports.getUserPosts = async (req, res, next) => {
 			{
 				model: PhotoRating,
 				attributes: ['rating_value', 'user_id']
+			},
+			{
+				model: PhotoInterested,
+				attributes: ['id', 'photo_id', 'user_id']
 			}
 		]
 	})
 
-	const finalPhotos = filterPhotosArray(photos, req)
-	return res.status(200).json(finalPhotos)
+	photos = filterPhotosArray(photos, req)
+	return res.status(200).json(photos)
 }
 
 exports.viewPost = async (req, res, next) => {
@@ -372,10 +380,21 @@ function filterPhotosArray(photos, req) {
 			user_rating = rating ? rating.rating_value : null
 		}
 
+		// Obtener si estan interesados
+		let user_interested = false
+		if (req.loggedIn && req.user) {
+			const interested = photo.photo_interesteds.find(interested => interested.user_id == req.user.id)
+			if (interested) user_interested = true
+		}
+
+		// Sacar lo que no necesitamos que se vea en el cliente
+		const { photo_interesteds, photo_ratings, ...rest } = photo.toJSON();
+
 		return {
-			...photo.toJSON(),
+			...rest,
 			rating_average,
-			user_rating
+			user_rating,
+			user_interested
 		}
 	})
 }
