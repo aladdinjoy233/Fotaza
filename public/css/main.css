@@ -403,7 +403,7 @@ img {
   background-color: var(--clr-grey-dark);
 }
 
-.alert {
+.alert, .notification {
   padding: 1rem;
   position: absolute;
   right: 1rem;
@@ -416,27 +416,50 @@ img {
           animation: slide-in 0.5s ease forwards;
 }
 
-.alert.alert-error {
+.alert.alert-error, .alert-error.notification {
   background-color: var(--clr-error-bg);
   border-color: var(--clr-error);
   color: var(--clr-error);
 }
 
-.alert.alert-success {
+.alert.alert-success, .alert-success.notification {
   background-color: var(--clr-success-bg);
   border-color: var(--clr-success);
   color: var(--clr-success);
 }
 
-.alert.alert-info {
+.alert.alert-info, .alert-info.notification {
   background-color: var(--clr-info-bg);
   border-color: var(--clr-info);
   color: var(--clr-info);
 }
 
-.alert.slide-out {
+.alert.slide-out, .slide-out.notification {
   -webkit-animation: slide-out 0.75s ease forwards;
           animation: slide-out 0.75s ease forwards;
+}
+
+.notification {
+  top: 1rem;
+  bottom: initial;
+  background-color: var(--clr-grey);
+  border-color: var(--clr-grey-hover);
+  color: var(--clr-grey-light-hover);
+  text-decoration: none;
+  z-index: 1000;
+}
+
+.notification-header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  gap: 1rem;
 }
 
 @-webkit-keyframes slide-in {

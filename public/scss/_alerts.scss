@@ -33,6 +33,24 @@
 	}
 }
 
+.notification {
+	@extend .alert;
+	top: 1rem;
+	bottom: initial;
+	background-color: var(--clr-grey);
+	border-color: var(--clr-grey-hover);
+	color: var(--clr-grey-light-hover);
+	text-decoration: none;
+	z-index: 1000;
+
+	&-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+	}
+}
+
 @keyframes slide-in {
 	from {
 		transform: translateX(150%);

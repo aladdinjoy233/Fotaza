@@ -29,9 +29,19 @@ var vueApp = new Vue({
 
 		comentario: '',
 		interesado: photo.user_interested,
+
+		usuarioLogeado: {}
 	},
 
 	methods: {
+		async obtenerUsuario() {
+			const vm = this
+			if (!userId) return
+
+			const user = await getUser()
+			if (user != null) Object.assign(vm.usuarioLogeado, user)
+		},
+
 		getRelativeTime() {
 			const createdDate = moment(this.photo.created_at)
 			const formattedRelativeTime = createdDate.fromNow()
@@ -123,9 +133,11 @@ var vueApp = new Vue({
 
 					if (data.interested) {
 						vm.interested.push(data.savedInterested)
+						socket.emit('send-interest', photo.user.id, vm.usuarioLogeado.nombre, photo.id)
 					} else {
 						vm.interested = vm.interested.filter(obj => obj.user_id != userId)
 					}
+
 					showAlert(
 						'Interesado',
 						data.interested ? 'Has mostrado interés' : 'Has quitado el interés',
@@ -141,10 +153,10 @@ var vueApp = new Vue({
 	},
 
 	mounted() {
+		this.obtenerUsuario()
+
 		moment.locale('es')
 		this.getRelativeTime()
-
-		console.log(photo)
 
 		// Socket listeners
 		socket.emit('view-post', photo.id)

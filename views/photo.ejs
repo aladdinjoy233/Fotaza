@@ -95,8 +95,7 @@
 								<div class="actions__rating-average">{{ photo.rating_average ? photo.rating_average + ' (promedio)' : '' }}</div>
 							</div>
 
-							<!-- TODO: Hide button for owner user and not logged in -->
-							<div class="actions__interested">
+							<div class="actions__interested" v-if="userId != photo.user_id">
 								<button class="btn btn-link" :class="{ 'interested': interesado }" @click="interesado = !interesado"><i class="fa-solid fa-cart-shopping"></i></button>
 							</div>
 

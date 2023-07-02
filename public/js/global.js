@@ -82,3 +82,34 @@ function showAlert(title, message, type = 'info') {
 	setTimeout(() => alert.classList.add('slide-out'), timeInMiliSeconds); // animacion de salida de la alerta
 	setTimeout(() => alert.remove(), timeInMiliSeconds + 1250); // se va del DOM
 }
+
+// Notification function
+function showNotification(title, message, linkHref = '#') {
+	const notif = document.createElement('a')
+	document.body.appendChild(notif)
+
+	notif.href = linkHref
+	notif.classList.add('notification')
+	notif.innerHTML = `
+		<div class="notification-header">
+			<h3>${title}</h3>
+			<i class="fa-solid fa-circle-xmark"></i>
+		</div>
+		<p>${message}</p>
+	`
+
+	const closeBtn = notif.querySelector('.fa-circle-xmark')
+	closeBtn.addEventListener('click', e => {
+		e.preventDefault()
+		notif.classList.add('slide-out')
+		setTimeout(() => notif.remove(), 1250)
+	})
+
+	const seconds = 10; // Facil para cambiarle la duracion de la notifs en segundos
+	const timeInMiliSeconds = seconds * 1000
+
+	setTimeout(() => {
+		notif.classList.add('slide-out')
+		setTimeout(() => notif.remove(), 1250)
+	}, timeInMiliSeconds)
+}
