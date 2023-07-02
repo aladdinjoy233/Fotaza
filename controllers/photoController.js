@@ -5,6 +5,7 @@ const Right = require('../database/models/Right')
 const Tag = require('../database/models/Tag')
 const PhotoComment = require('../database/models/PhotoComment')
 const PhotoRating = require('../database/models/PhotoRating')
+const PhotoInterested = require('../database/models/PhotoInterested')
 
 const sharp = require('sharp')
 const { uploadPhoto, deletePhoto } = require('../firebase/firebase')
@@ -312,6 +313,16 @@ exports.viewPost = async (req, res, next) => {
 						attributes: ['usuario', 'avatar', 'nombre']
 					}
 				]
+			},
+			{
+				model: PhotoInterested,
+				attributes: ['id', 'photo_id', 'user_id'],
+				include: [
+					{
+						model: User,
+						attributes: ['usuario', 'avatar', 'nombre']
+					}
+				]
 			}
 		]
 	})
@@ -372,10 +383,18 @@ function filterPhotosArray(photos, req) {
 function filterPhoto(photo, req) {
 	let rating_average = getRatingAverage(photo)
 
+	// Obtener el rating
 	let user_rating = null
 	if (req.loggedIn && req.user) {
 		const rating = photo.photo_ratings.find(rating => rating.user_id == req.user.id)
 		user_rating = rating ? rating.rating_value : null
+	}
+
+	// Obtener si estan interesados
+	let user_interested = false
+	if (req.loggedIn && req.user) {
+		const interested = photo.photo_interesteds.find(interested => interested.user_id == req.user.id)
+		if (interested) user_interested = true
 	}
 
 	// Cambiar orden de los comentarios
@@ -385,7 +404,8 @@ function filterPhoto(photo, req) {
 	return {
 		...photo.toJSON(),
 		rating_average,
-		user_rating
+		user_rating,
+		user_interested
 	}
 }
 
@@ -419,4 +439,37 @@ exports.setComment = async (req, res, next) => {
 	})
 
 	return res.status(200).json({ savedComment })
+}
+
+// ====================
+// Interested functions
+// ====================
+exports.setInterested = async (req, res, next) => {
+	const { photoId } = req.params
+	let { interested } = req.body
+	const user = req.user
+
+	if (!photoId || interested == undefined || !user) return res.status(400).json({ error: true, errorMsg: 'Error al marcar como interesado' })
+
+	let savedInterested = null, created = null
+	if (interested) {
+		[savedInterested, created] = await PhotoInterested.findOrCreate({
+			where: { photo_id: photoId, user_id: user.id }
+		})
+
+		// Despues de crear/buscarlo, obtener los datos necesarios
+		savedInterested = await PhotoInterested.findByPk(savedInterested.id, {
+			attributes: ['id', 'photo_id', 'user_id'],
+			include: [
+				{
+					model: User,
+					attributes: ['id', 'usuario', 'avatar', 'nombre']
+				}
+			]
+		})
+	} else {
+		await PhotoInterested.destroy({ where: { photo_id: photoId, user_id: user.id } })
+	}
+
+	return res.status(200).json({ savedInterested, interested })
 }

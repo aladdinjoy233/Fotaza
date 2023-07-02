@@ -54,7 +54,7 @@ app.use('/photo', photoRouter);
 
 // Conectar a la db
 sequelize.sync({ force: false })
-	.then(() => console.log('Conectado a la base de datos!'))
+	.then(() => console.log('Connected to the database!'))
 	.catch(err => console.log(err));
 
 // Catch 404 and forward to error handler

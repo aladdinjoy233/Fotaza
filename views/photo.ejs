@@ -49,7 +49,10 @@
 								</div>
 								<div class="collapsable-content">
 									<div v-if="interested.length > 0">
-
+										<a class="interested__item" v-for="i in interested" :href="`${baseUrl}/profile/${i.user.usuario}`">
+											<img :src="i.user.avatar">
+											<span>{{ i.user.nombre }}</span>
+										</a>
 									</div>
 									<div v-else class="interested__empty">
 										<p>No hay interesados...</p>
@@ -72,22 +75,31 @@
 
 					<div class="actions" v-if="userId !== null">
 
-						<div class="actions__rating">
-							<form class="actions__rating-stars">
-								<p>
-									<input type="radio" :id="radioId + '-1'" name="rating" value="5" v-model="rating">
-									<label :for="radioId + '-1'">★</label>
-									<input type="radio" :id="radioId + '-2'" name="rating" value="4" v-model="rating">
-									<label :for="radioId + '-2'">★</label>
-									<input type="radio" :id="radioId + '-3'" name="rating" value="3" v-model="rating">
-									<label :for="radioId + '-3'">★</label>
-									<input type="radio" :id="radioId + '-4'" name="rating" value="2" v-model="rating">
-									<label :for="radioId + '-4'">★</label>
-									<input type="radio" :id="radioId + '-5'" name="rating" value="1" v-model="rating">
-									<label :for="radioId + '-5'">★</label>
-								</p>
-							</form>
-							<div class="actions__rating-average">{{ photo.rating_average ? photo.rating_average + ' (promedio)' : '' }}</div>
+						<div class="actions-group">
+
+							<div class="actions__rating">
+								<form class="actions__rating-stars">
+									<p>
+										<input type="radio" :id="radioId + '-1'" name="rating" value="5" v-model="rating">
+										<label :for="radioId + '-1'">★</label>
+										<input type="radio" :id="radioId + '-2'" name="rating" value="4" v-model="rating">
+										<label :for="radioId + '-2'">★</label>
+										<input type="radio" :id="radioId + '-3'" name="rating" value="3" v-model="rating">
+										<label :for="radioId + '-3'">★</label>
+										<input type="radio" :id="radioId + '-4'" name="rating" value="2" v-model="rating">
+										<label :for="radioId + '-4'">★</label>
+										<input type="radio" :id="radioId + '-5'" name="rating" value="1" v-model="rating">
+										<label :for="radioId + '-5'">★</label>
+									</p>
+								</form>
+								<div class="actions__rating-average">{{ photo.rating_average ? photo.rating_average + ' (promedio)' : '' }}</div>
+							</div>
+
+							<!-- TODO: Hide button for owner user and not logged in -->
+							<div class="actions__interested">
+								<button class="btn btn-link" :class="{ 'interested': interesado }" @click="interesado = !interesado"><i class="fa-solid fa-cart-shopping"></i></button>
+							</div>
+
 						</div>
 
 						<div class="actions__comment">

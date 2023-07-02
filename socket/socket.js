@@ -9,19 +9,17 @@ module.exports = http => {
 	})
 
 	io.on('connection', socket => {
-		console.log('User connected')
+		// console.log('User connected')
 
 		socket.on('send-comment', (comment, photoId) => {
 			if (!photoId) return
 			socket.to(photoId).emit('recieve-comment', comment)
 		})
 
-		socket.on('view-post', photoId => {
-			socket.join(photoId)
-		})
+		socket.on('view-post', photoId => socket.join(photoId))
 
 		socket.on('disconnect', () => {
-			console.log('User disconnected')
+			// console.log('User disconnected')
 		})
 	})
 }

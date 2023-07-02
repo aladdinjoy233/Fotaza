@@ -24,11 +24,11 @@ var vueApp = new Vue({
 
 		showCollapseInterested: false,
 
-		interested: [],
+		interested: photo.photo_interesteds,
 		comments: photo.photo_comments,
 
 		comentario: '',
-		// socket: io(socketUrl),
+		interesado: photo.user_interested,
 	},
 
 	methods: {
@@ -98,12 +98,53 @@ var vueApp = new Vue({
 					vm.rating = oldRating
 				})
 				.finally(() => vm.awaitingResponse = false)
+		},
+
+		interesado(newVal, oldVal) {
+			const vm = this
+
+			if (vm.awaitingResponse) return
+			vm.awaitingResponse = true
+
+			fetch(`/photo/${photo.id}/interested`, {
+				method: 'POST',
+				body: JSON.stringify({ interested: newVal }),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			})
+				.then(res => res.json())
+				.then(data => {
+					if (data.error) {
+						vm.interesado = oldVal
+						return
+					}
+					vm.interesado = data.interested
+
+					if (data.interested) {
+						vm.interested.push(data.savedInterested)
+					} else {
+						vm.interested = vm.interested.filter(obj => obj.user_id != userId)
+					}
+					showAlert(
+						'Interesado',
+						data.interested ? 'Has mostrado interés' : 'Has quitado el interés',
+						'success'
+					)
+				})
+				.catch(err => {
+					console.log(err)
+					vm.interesado = oldVal
+				})
+				.finally(() => vm.awaitingResponse = false)
 		}
 	},
 
 	mounted() {
 		moment.locale('es')
 		this.getRelativeTime()
+
+		console.log(photo)
 
 		// Socket listeners
 		socket.emit('view-post', photo.id)

@@ -6,6 +6,7 @@ const Tag = require('./models/Tag')
 const UserTag = require('./models/UserTag')
 const PhotoComment = require('./models/PhotoComment')
 const PhotoRating = require('./models/PhotoRating')
+const PhotoInterested = require('./models/PhotoInterested')
 
 Photo.belongsTo(User, { foreignKey: 'user_id', targetKey: 'id' })
 Photo.belongsTo(Category, { foreignKey: 'category_id', targetKey: 'id' })
@@ -34,3 +35,10 @@ PhotoComment.belongsTo(User, { foreignKey: 'user_id' })
 
 Photo.hasMany(PhotoComment, { foreignKey: 'photo_id' })
 PhotoComment.belongsTo(Photo, { foreignKey: 'photo_id' })
+
+// Photo interested
+User.hasMany(PhotoInterested, { foreignKey: 'user_id' })
+PhotoInterested.belongsTo(User, { foreignKey: 'user_id' })
+
+Photo.hasMany(PhotoInterested, { foreignKey: 'photo_id' })
+PhotoInterested.belongsTo(Photo, { foreignKey: 'photo_id' })

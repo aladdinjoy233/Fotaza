@@ -205,9 +205,38 @@
 					}
 				}
 			}
+
+			.interested__item {
+				display: flex;
+				align-items: center;
+				gap: .5rem;
+				margin-top: .5rem;
+				color: var(--clr-grey-light-hover);
+				text-decoration: none;
+
+				img {
+					width: 1.75rem;
+					height: 1.75rem;
+					border-radius: 50%;
+					overflow: hidden;
+					display: grid;
+					place-items: center;
+				}
+
+				&:hover {
+					text-decoration: underline;
+				}
+			}
 		}
 
 		.actions {
+
+			&-group {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+			}
+
 			&__rating {
 				display: flex;
 				align-items: center;
@@ -237,6 +266,24 @@
 				}
 
 				&-average {color: var(--clr-grey-light); }
+			}
+
+			&__interested {
+
+				.btn.btn-link {
+					color: var(--clr-grey-hover);
+					transition: 150ms ease;
+	
+					&::after { content: none; }
+	
+					&:hover {
+						color: var(--clr-grey-light);
+					}
+
+					&.interested {
+						color: var(--clr-primary);
+					}
+				}
 			}
 		}
 

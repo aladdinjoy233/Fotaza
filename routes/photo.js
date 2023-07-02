@@ -19,12 +19,6 @@ router.get('/:photoId', authController.checkUserState, photoController.viewPost)
 
 router.post('/:photoId/rating', authController.isAuthenticated, photoController.setRating)
 router.post('/:photoId/comment', authController.isAuthenticated, photoController.setComment)
-
-// router.get('/', (req, res) => res.redirect('/auth'))
-// router.get('/edit', authController.isAuthenticated, userController.editProfile)
-// router.get('/:slug', userController.userProfile)
-// router.get('/get/:userId', authController.isAuthenticated, userController.get)
-// router.post('/checkAvailable', authController.isAuthenticated, userController.checkAvailable)
-// router.post('/edit', authController.isAuthenticated, upload.single('avatar'), userController.edit)
+router.post('/:photoId/interested', authController.isAuthenticated, photoController.setInterested)
 
 module.exports = router;
