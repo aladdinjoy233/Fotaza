@@ -17,12 +17,23 @@ export const CommentComponent = {
 					<a class="btn btn-link comment__body-profile" :href="'${baseUrl}/profile/' + comment.user.usuario">{{ comment.user.nombre }}</a>
 					{{ comment.comment }}
 				</p>
-				<p class="comment__body-date">{{ relativeTime }}</p>
+				<div class="d-flex">
+					<p class="comment__body-date">{{ relativeTime }}</p>
+					<button
+						v-if="comment.user.id == userId"
+						class="btn btn-link comment__body-delete"
+						type="button"
+						@click="deleteComment"
+					>
+						<i class="fa-solid fa-trash"></i>
+					</button>
+				</div>
 			</div>
 		</div>
 	`,
 	data() {
 		return {
+			userId,
 			relativeTime: '',
 		}
 	},
@@ -31,7 +42,9 @@ export const CommentComponent = {
 			const createdDate = moment(this.comment.created_at)
 			const formattedRelativeTime = createdDate.fromNow()
 			this.relativeTime = formattedRelativeTime
-		}
+		},
+
+		deleteComment() { this.$emit('delete-comment', this.comment.id) }
 	},
 	mounted() {
 		moment.locale('es')

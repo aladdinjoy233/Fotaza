@@ -63,7 +63,12 @@
 	
 						<div class="comments">
 							<div v-if="comments.length > 0">
-								<comment-component v-for="comment in comments" :comment="comment" :key="comment.id"></comment-component>
+								<comment-component
+									v-for="comment in comments"
+									:comment="comment"
+									:key="comment.id"
+									@delete-comment="deleteComment">
+								</comment-component>
 							</div>
 							<div v-else class="comments__empty">
 								<p>No hay comentarios...</p>

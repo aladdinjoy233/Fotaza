@@ -2055,9 +2055,32 @@ img {
   bottom: 0.125rem;
 }
 
-.photo-page .container .data-body .comments .comment .comment__body-date {
+.photo-page .container .data-body .comments .comment .comment__body .d-flex {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: .5rem;
   margin-bottom: 1rem;
+}
+
+.photo-page .container .data-body .comments .comment .comment__body-date {
   color: var(--clr-grey-light);
+}
+
+.photo-page .container .data-body .comments .comment .comment__body-delete {
+  color: var(--clr-grey-light);
+  font-size: 0.8125rem;
+}
+
+.photo-page .container .data-body .comments .comment .comment__body-delete::after {
+  content: none;
+}
+
+.photo-page .container .data-body .comments .comment .comment__body-delete:hover {
+  color: var(--clr-error);
 }
 
 .photo-page .container .data-body .interested__item {

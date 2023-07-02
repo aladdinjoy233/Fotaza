@@ -1,8 +1,6 @@
 import { SideNavComponent } from "./components/SideNavComponent.js"
 import { CommentComponent } from "./components/CommentComponent.js"
 
-const socket = io(socketUrl)
-
 var vueApp = new Vue({
 	el: "#app",
 
@@ -71,6 +69,34 @@ var vueApp = new Vue({
 					vm.comentario = ''
 					vm.comments.unshift(data.savedComment)
 					socket.emit('send-comment', data.savedComment, photo.id)
+				})
+				.catch(err => {
+					console.log(err)
+				})
+				.finally(() => vm.awaitingResponse = false)
+		},
+
+		deleteComment(commentId) {
+			const vm = this
+
+			if (vm.awaitingResponse) return
+			vm.awaitingResponse = true
+
+			fetch(`/photo/${photo.id}/delete-comment`, {
+				method: 'POST',
+				body: JSON.stringify({ comment_id: commentId }),
+				headers: { 'Content-Type': 'application/json' }
+			})
+				.then(res => res.json())
+				.then(data => {
+					if (data.error) {
+						showAlert('Comentario', data.errorMsg, 'error')
+						return
+					}
+					
+					showAlert('Comentario', 'Comentario eliminado con éxito')
+					socket.emit('delete-comment', commentId, photo.id)
+					vm.comments = vm.comments.filter(comment => comment.id != commentId)
 				})
 				.catch(err => {
 					console.log(err)
@@ -161,5 +187,6 @@ var vueApp = new Vue({
 		// Socket listeners
 		socket.emit('view-post', photo.id)
 		socket.on('recieve-comment', comment => this.comments.unshift(comment))
+		socket.on('delete-comment', commentId => this.comments = this.comments.filter(comment => comment.id != commentId))
 	}
 })

@@ -19,6 +19,7 @@ router.get('/:photoId', authController.checkUserState, photoController.viewPost)
 
 router.post('/:photoId/rating', authController.isAuthenticated, photoController.setRating)
 router.post('/:photoId/comment', authController.isAuthenticated, photoController.setComment)
+router.post('/:photoId/delete-comment', authController.isAuthenticated, photoController.deleteComment)
 router.post('/:photoId/interested', authController.isAuthenticated, photoController.setInterested)
 
 module.exports = router;

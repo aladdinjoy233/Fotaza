@@ -197,10 +197,24 @@
 								bottom: 0.125rem;
 							}
 						}
+
+						.d-flex {
+							display: flex;
+							align-items: center;
+							gap: .5rem;
+							margin-bottom: 1rem;
+						}
 						
 						&-date {
-							margin-bottom: 1rem;
 							color: var(--clr-grey-light);
+						}
+						
+						&-delete {
+							color: var(--clr-grey-light);
+							&::after { content: none; }
+							font-size: 0.8125rem;
+
+							&:hover { color: var(--clr-error); }
 						}
 					}
 				}

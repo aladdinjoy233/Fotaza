@@ -318,7 +318,7 @@ exports.viewPost = async (req, res, next) => {
 				include: [
 					{
 						model: User,
-						attributes: ['usuario', 'avatar', 'nombre']
+						attributes: ['id', 'usuario', 'avatar', 'nombre']
 					}
 				]
 			},
@@ -458,6 +458,22 @@ exports.setComment = async (req, res, next) => {
 	})
 
 	return res.status(200).json({ savedComment })
+}
+
+exports.deleteComment = async (req, res, next) => {
+	const { photoId } = req.params
+	let { comment_id } = req.body
+	const user = req.user
+
+	if (!photoId || !comment_id || !user) return res.status(400).json({ error: true, errorMsg: 'Error al eliminar comentario' })
+	
+	let comment = await PhotoComment.findByPk(comment_id)
+	if (!comment) return res.status(400).json({ error: true, errorMsg: 'No existe el comentario' })
+	if (comment.user_id != user.id) return res.status(400).json({ error: true, errorMsg: 'No tienes permiso para eliminar este comentario' })
+
+	await comment.destroy()
+
+	return res.status(200).json({ comment })
 }
 
 // ====================

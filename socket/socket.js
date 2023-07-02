@@ -11,13 +11,20 @@ module.exports = http => {
 	io.on('connection', socket => {
 		console.log('User connected')
 
+		// === Sockets comentarios ===
+		socket.on('view-post', photoId => socket.join(photoId))
+
 		socket.on('send-comment', (comment, photoId) => {
 			if (!photoId) return
 			socket.to(photoId).emit('recieve-comment', comment)
 		})
+		
+		socket.on('delete-comment', (commentId, photoId) => {
+			if (!photoId) return
+			socket.to(photoId).emit('delete-comment', commentId)
+		})
 
-		socket.on('view-post', photoId => socket.join(photoId))
-
+		// === Sockets interesados ===
 		socket.on('send-interest', (targetUserId, interestedName, photoId) => {
 			if (!targetUserId) return
 			socket.to(targetUserId).emit('recieve-notif', `${interestedName} esta interesado en tu foto!`, 'Haga click para ver la foto...', `${baseUrl}/photo/${photoId}`)
