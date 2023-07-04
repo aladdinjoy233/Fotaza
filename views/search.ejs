@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('partials/head') %>
+<body>
+	<%- include('partials/nav') %>
+
+	<div id="app" class="search-page">
+
+		<!-- <side-nav v-if="user.id"></side-nav> -->
+
+		<div class="search-container">
+			<form class="search" @submit.prevent="">
+				<div class="input-group">
+					<div class="input-btn-group">
+						<input type="text" class="form-control" placeholder="Search" v-model="query">
+						<button type="submit" class="icon-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<div class="content-divider"></div>
+
+		<div class="post-container">
+
+			<post-component v-for="post in posts" :key="post.id" :post="post"></post-component>
+
+			<div class="loading-container" ref="loadMore">
+				<Transition name="showLoad">
+					<load-component v-if="loading"></load-component>
+				</Transition>
+			</div>
+
+		</div>
+
+	</div>
+
+	<script>
+		const query = JSON.parse(`<%- JSON.stringify(query) %>`)
+	</script>
+	
+</body>
+</html>

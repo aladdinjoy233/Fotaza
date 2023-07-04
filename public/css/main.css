@@ -1365,6 +1365,18 @@ img {
   }
 }
 
+.search-page .search-container {
+  width: 95%;
+  max-width: 30rem;
+  margin: 2rem auto;
+}
+
+.search-page .content-divider {
+  width: 95%;
+  margin: 2rem auto;
+  border-bottom: 1px solid var(--clr-grey);
+}
+
 .profile-page .user-data {
   display: -webkit-box;
   display: -ms-flexbox;

@@ -256,6 +256,70 @@ exports.getPosts = async (req, res, next) => {
 
 }
 
+exports.searchPosts = async (req, res, next) => {
+	const { q, page, limit } = req.query
+
+	// Para la paginacion, verificar para que no traiga todo
+	if (!page || !limit) return res.status(400).json({ error: true, errorMsg: 'Falta datos' })
+
+	const offset = (page - 1) * limit
+	const parsedLimit = parseInt(limit, 10)
+
+	// Variables de las fotos
+	const order = [['created_at', 'DESC']]
+	const attributes = ['id', 'user_id', 'title', 'file_path', 'is_private', 'created_at']
+	const include = [
+		{
+			model: User,
+			attributes: ['id', 'usuario', 'avatar', 'nombre']
+		},
+		{
+			model: Tag,
+			attributes: ['tag_name']
+		},
+		{
+			model: PhotoRating,
+			attributes: ['rating_value', 'user_id']
+		},
+		{
+			model: PhotoInterested,
+			attributes: ['id', 'photo_id', 'user_id']
+		}
+	]
+
+	const where = {}
+
+	// Si el usuario no esta logeado, solo devolver los posts publicos
+	if (!req.loggedIn) {
+		where.is_private = false
+	}
+
+	let tagPhotoSearch = []
+	let titlePhotoSearch = []
+
+	if (q) {
+		const tag = await Tag.findOne({ where: { tag_name: { [Op.like]: `%${q}%` } } })
+		if (tag) tagPhotoSearch = await tag.getPhotos({ offset, limit: parsedLimit, where, order, attributes, include })
+
+		// Buscar por titulo
+		where.title = {
+			[Op.like]: `%${q}%`
+		}
+
+		// Filtrar que no se repitan las fotos
+		where.id = {
+			[Op.notIn]: tagPhotoSearch.map(photo => photo.id)
+		}
+	}
+
+	titlePhotoSearch = await Photo.findAll({ offset, limit: parsedLimit, where, order, attributes, include })
+
+	let photos = titlePhotoSearch.concat(tagPhotoSearch)
+	photos = filterPhotosArray(photos, req)
+
+	return res.status(200).json(photos)
+}
+
 exports.getUserPosts = async (req, res, next) => {
 	const { userId } = req.params
 	const where = { user_id: userId }

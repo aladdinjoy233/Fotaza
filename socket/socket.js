@@ -9,7 +9,7 @@ module.exports = http => {
 	})
 
 	io.on('connection', socket => {
-		console.log('User connected')
+		// console.log('User connected')
 
 		// === Sockets comentarios ===
 		socket.on('view-post', photoId => socket.join(photoId))

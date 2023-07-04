@@ -1,8 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
-router.get('/', (req, res, next) => {
-	res.render('index', { title: 'Fotaza', scripts: ['index'] })
-})
+const indexController = require('../controllers/indexController')
+
+router.get('/', indexController.indexView)
+router.get('/search', indexController.searchView)
 
 module.exports = router;
