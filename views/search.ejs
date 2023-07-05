@@ -9,7 +9,7 @@
 		<!-- <side-nav v-if="user.id"></side-nav> -->
 
 		<div class="search-container">
-			<form class="search" @submit.prevent="">
+			<form class="search" @submit.prevent="newSearch">
 				<div class="input-group">
 					<div class="input-btn-group">
 						<input type="text" class="form-control" placeholder="Search" v-model="query">

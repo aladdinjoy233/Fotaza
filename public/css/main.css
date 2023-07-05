@@ -946,6 +946,7 @@ img {
   color: var(--clr-primary);
   font-size: 0.825rem;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .post-container .post .post-details__tags .tag:hover {
@@ -1933,6 +1934,7 @@ img {
   color: var(--clr-primary);
   font-size: 0.825rem;
   cursor: pointer;
+  text-decoration: none;
 }
 
 .photo-page .container .data__header-tags .tag:hover {

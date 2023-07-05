@@ -60,7 +60,7 @@ export const PostComponent = {
 			<div class="post-details">
 				<p>{{ post.title }}</p>
 				<div class="post-details__tags">
-					<span class="tag" v-for="tag in post.tags">#{{ tag.tag_name }}</span>
+					<a :href="'${baseUrl}/search?q=' + tag.tag_name" class="tag" v-for="tag in post.tags">#{{ tag.tag_name }}</a>
 				</div>
 			</div>
 

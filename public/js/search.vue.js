@@ -58,7 +58,6 @@ var vueApp = new Vue({
 						return
 					}
 
-					console.log(data)
 					vm.posts.push(...data)
 
 					if (data.length === 0) {
@@ -82,6 +81,24 @@ var vueApp = new Vue({
 				vm.getPosts()
 
 		},
+
+		newSearch() {
+			const vm = this
+			vm.posts = []
+			vm.page = 1
+			vm.limit = 10
+			vm.loading = false
+			vm.hasMorePosts = true
+
+			// Setear los parametros en la URL
+			const url = new URL(window.location.href)
+			const searchParams = new URLSearchParams(url.search)
+			searchParams.set('q', vm.query)
+			url.search = searchParams.toString()
+			history.pushState(null, null, url.href)
+
+			vm.getPosts()
+		},
 	},
 
 
@@ -91,11 +108,5 @@ var vueApp = new Vue({
 		vm.getPosts()
 
 		window.addEventListener("scroll", vm.handleScroll)
-
-		console.log(query)
 	},
-
-	beforeDestroy() {
-		
-	}
 })

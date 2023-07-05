@@ -33,7 +33,7 @@
 						<div>
 							<p>{{ photo.title }}</p>
 							<div class="data__header-tags">
-								<span class="tag" v-for="tag in photo.tags">#{{ tag.tag_name }}</span>
+								<a class="tag" v-for="tag in photo.tags" :href="`${baseUrl}/search?q=${tag.tag_name}`">#{{ tag.tag_name }}</a>
 							</div>
 						</div>
 

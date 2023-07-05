@@ -274,10 +274,6 @@ exports.searchPosts = async (req, res, next) => {
 			attributes: ['id', 'usuario', 'avatar', 'nombre']
 		},
 		{
-			model: Tag,
-			attributes: ['tag_name']
-		},
-		{
 			model: PhotoRating,
 			attributes: ['rating_value', 'user_id']
 		},
@@ -294,29 +290,22 @@ exports.searchPosts = async (req, res, next) => {
 		where.is_private = false
 	}
 
-	let tagPhotoSearch = []
-	let titlePhotoSearch = []
-
 	if (q) {
-		const tag = await Tag.findOne({ where: { tag_name: { [Op.like]: `%${q}%` } } })
-		if (tag) tagPhotoSearch = await tag.getPhotos({ offset, limit: parsedLimit, where, order, attributes, include })
-
-		// Buscar por titulo
-		where.title = {
-			[Op.like]: `%${q}%`
-		}
-
-		// Filtrar que no se repitan las fotos
-		where.id = {
-			[Op.notIn]: tagPhotoSearch.map(photo => photo.id)
-		}
+		// Buscar por titulo o tags
+		include.push({
+			model: Tag,
+			attributes: [],
+			where: {
+				[Op.or]: [
+					{ tag_name: { [Op.like]: `%${q}%` } },
+					{ '$Photos.title$': { [Op.like]: `%${q}%` } }
+				]
+			}
+		})
 	}
 
-	titlePhotoSearch = await Photo.findAll({ offset, limit: parsedLimit, where, order, attributes, include })
-
-	let photos = titlePhotoSearch.concat(tagPhotoSearch)
-	photos = filterPhotosArray(photos, req)
-
+	let photos = await Photo.findAll({ offset, limit: parsedLimit, where,	order, attributes, include })
+	photos = await filterSearchedPhotosArray(photos, req)
 	return res.status(200).json(photos)
 }
 
@@ -456,6 +445,52 @@ function filterPhotosArray(photos, req) {
 
 		return {
 			...rest,
+			rating_average,
+			user_rating,
+			user_interested
+		}
+	})
+}
+
+async function filterSearchedPhotosArray(photos, req) {
+	const photoIds = photos.map(photo => photo.id)
+	const remainingTags = await Tag.findAll({
+		include: [
+			{
+				model: Photo,
+				where: { id: { [Op.in]: photoIds } },
+				attributes: ['id']
+			}
+		]
+	})
+
+	return photos.map(photo => {
+		let rating_average = getRatingAverage(photo)
+		
+		let user_rating = null
+		if (req.loggedIn && req.user) {
+			const rating = photo.photo_ratings.find(rating => rating.user_id == req.user.id)
+			user_rating = rating ? rating.rating_value : null
+		}
+
+		// Obtener si estan interesados
+		let user_interested = false
+		if (req.loggedIn && req.user) {
+			const interested = photo.photo_interesteds.find(interested => interested.user_id == req.user.id)
+			if (interested) user_interested = true
+		}
+
+		// Sacar lo que no necesitamos que se vea en el cliente
+		const { photo_interesteds, photo_ratings, ...rest } = photo.toJSON();
+
+		// Obtener los tags faltantes
+		const tags = remainingTags
+			.filter(tag => tag.photos.some(p => p.id == photo.id))
+			.map(tag => ({ tag_name: tag.tag_name }))
+
+		return {
+			...rest,
+			tags,
 			rating_average,
 			user_rating,
 			user_interested
