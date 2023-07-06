@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('partials/head') %>
+<body>
+	<%- include('partials/nav') %>
+
+	<div id="app" class="popular-page">
+
+		<side-nav v-if="user.id" selected="destacado"></side-nav>
+
+		<div class="post-container">
+
+			<p class="not-found" v-if="posts.length < 1 && !loading">No hay publicaciones destacados</p>
+
+			<post-component v-for="post in posts" :key="post.id" :post="post"></post-component>
+
+			<div class="loading-container" ref="loadMore">
+				<Transition name="showLoad">
+					<load-component v-if="loading"></load-component>
+				</Transition>
+			</div>
+
+		</div>
+
+	</div>
+	
+</body>
+</html>

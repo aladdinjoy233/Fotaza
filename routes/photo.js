@@ -16,6 +16,7 @@ router.post('/delete', authController.isAuthenticated, photoController.deletePos
 router.get('/posts', authController.checkUserState, photoController.getPosts)
 router.get('/search', authController.checkUserState, photoController.searchPosts)
 router.get('/posts/:userId', authController.checkUserState, photoController.getUserPosts)
+router.get('/popular', authController.checkUserState, photoController.getPopularPosts)
 router.get('/:photoId', authController.checkUserState, photoController.viewPost)
 
 router.post('/:photoId/rating', authController.isAuthenticated, photoController.setRating)

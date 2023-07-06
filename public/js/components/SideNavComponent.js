@@ -12,7 +12,7 @@ export const SideNavComponent = {
 				<a href="${baseUrl}" class="btn btn-link side-nav__item" :class="{ 'selected': selected == 'home' }" key="home">
 					<i class="fa-solid fa-house"></i> Portada
 				</a>
-				<a href="${baseUrl}" class="btn btn-link side-nav__item" :class="{ 'selected': selected == 'destacado' }" key="destacado">
+				<a href="${baseUrl}/popular/" class="btn btn-link side-nav__item" :class="{ 'selected': selected == 'destacado' }" key="destacado">
 					<i class="fa-solid fa-star"></i> Destacado
 				</a>
 				<a href="${baseUrl}/photo/" class="btn btn-link side-nav__item" :class="{ 'selected': selected == 'crear' }" key="crear">

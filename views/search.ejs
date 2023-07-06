@@ -22,6 +22,8 @@
 		<div class="content-divider"></div>
 
 		<div class="post-container">
+			
+			<p class="not-found" v-if="posts.length < 1 && !loading">No se encontraron publicaciones...</p>
 
 			<post-component v-for="post in posts" :key="post.id" :post="post"></post-component>
 

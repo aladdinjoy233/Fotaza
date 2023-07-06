@@ -772,6 +772,10 @@ img {
   padding-bottom: 5rem;
 }
 
+.post-container p.not-found {
+  text-align: center;
+}
+
 .post-container .post {
   margin-top: 2rem;
   width: 100%;

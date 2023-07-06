@@ -10,6 +10,7 @@ const PhotoInterested = require('../database/models/PhotoInterested')
 const sharp = require('sharp')
 const { uploadPhoto, deletePhoto } = require('../firebase/firebase')
 const { Op } = require('sequelize')
+const sequelize = require('../database/db')
 
 exports.createView = async (req, res, next) => {
 	const categories = await Category.findAll({
@@ -340,6 +341,74 @@ exports.getUserPosts = async (req, res, next) => {
 				attributes: ['id', 'photo_id', 'user_id']
 			}
 		]
+	})
+
+	photos = filterPhotosArray(photos, req)
+	return res.status(200).json(photos)
+}
+
+exports.getPopularPosts = async (req, res, next) => {
+	const { page, limit } = req.query
+
+	// Para la paginacion, verificar para que no traiga todo
+	if (!page || !limit) return res.status(400).json({ error: true, errorMsg: 'Falta datos' })
+
+	const offset = (page - 1) * limit
+	const parsedLimit = parseInt(limit, 10)
+	const where = {}
+
+	// Si el usuario no esta logeado, solo devolver los posts publicos
+	if (!req.loggedIn) {
+		where.is_private = false
+	}
+
+	const startDate = new Date(Date.now() - 1000 * 60 * 60 * 24 * 7) // Hace una semana
+	where.created_at = { [Op.gte]: startDate }
+
+	let photos = await Photo.findAll({
+		offset,
+		limit: parsedLimit,
+		attributes: {
+			include: [
+				[
+					sequelize.literal('(SELECT AVG(rating_value) FROM `photo_ratings` WHERE `photo_ratings`.`photo_id` = `photos`.`id`)'),
+					'averageRating',
+				],
+				[
+					sequelize.literal('(SELECT COUNT(*) FROM `photo_ratings` WHERE `photo_ratings`.`photo_id` = `photos`.`id`)'),
+					'ratingCount',
+				],
+			]
+		},
+		where,
+		include: [
+			{
+				model: User,
+				attributes: ['id', 'usuario', 'avatar', 'nombre']
+			},
+			{
+				model: Tag,
+				attributes: ['tag_name']
+			},
+			{
+				model: PhotoRating,
+				attributes: ['rating_value', 'user_id']
+			},
+			{
+				model: PhotoInterested,
+				attributes: ['id', 'photo_id', 'user_id']
+			}
+		],
+		having: {
+			ratingCount: {
+				[Op.gte]: 2, // TODO: Cambiar a 50
+			},
+			averageRating: {
+				[Op.gte]: 4
+			}
+		},
+		// group: ['photos.id'],
+		// subQuery: false
 	})
 
 	photos = filterPhotosArray(photos, req)
