@@ -221,12 +221,17 @@ exports.getPosts = async (req, res, next) => {
 		where.is_private = false
 	}
 
+	// Filtrar que no sean más de 1 año
+	const maxImageAge = new Date(Date.now() - 1000 * 60 * 60 * 24 * 365)
+	where.created_at = { [Op.gte]: maxImageAge }
+
 	try {
 		let photos = await Photo.findAll({
 			offset,
 			limit: parsedLimit,
 			where,
 			order: [['created_at', 'DESC']],
+			// order: [sequelize.literal('RAND()')],
 			attributes: ['id', 'user_id', 'title', 'file_path', 'is_private', 'created_at'],
 			include: [
 				{
@@ -401,7 +406,7 @@ exports.getPopularPosts = async (req, res, next) => {
 		],
 		having: {
 			ratingCount: {
-				[Op.gte]: 2, // TODO: Cambiar a 50
+				[Op.gte]: 50,
 			},
 			averageRating: {
 				[Op.gte]: 4
